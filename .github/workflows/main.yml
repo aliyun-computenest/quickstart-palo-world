@@ -1,0 +1,22 @@
+
+name: build
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install mkdocs
+      - run: pip install mkdocs-aliyun-computenest
+      - run: mkdocs gh-deploy --force --clean --verbose
+      - run: |
+          full_repo_name="${{ github.repository }}"
+          repo_name=${full_repo_name#*/}
+          curl -X POST -H "Content-Type: application/json" -d "{"ServiceDocRepoNames":["${repo_name}"]}" "http://1119821156893882.eventbridge.ap-southeast-1.aliyuncs.com/webhook/putEvents?token=d7ae8f64e0ce42c7b757f9013e3bbd13920fe8ea7c2b4d2cb3d2e8e9dfbd4230afc9f9dfb37448448e416da1a85dc2fc81627b00fecd4909bb47e536833d1bae"
+  
