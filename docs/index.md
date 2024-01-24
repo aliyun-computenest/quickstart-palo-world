@@ -83,332 +83,44 @@
    systemctl restart pal-server
    ```
    配置文件参数说明:
-   <table><thead><tr><th style="text-align:left"><div><div class="table-header">
 
-   Difficulty
-   </div></div></th><th style="text-align:left"><div><div class="table-header">
-   
-   英文
-   </div></div></th><th style="text-align:left"><div><div class="table-header">
-   
-   机翻
-   </div></div></th></tr></thead><tbody><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   DayTimeSpeedRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Day time speed
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   白天速度
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   NightTimeSpeedRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Night time speed
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   夜间速度
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   ExpRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   EXP rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   经验率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalCaptureRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal capture rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   好友捕获率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalSpawnNumRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal appearance rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal出现率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalDamageRateAttack
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Damage from pals multipiler
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   好友倍增器造成的伤害
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalDamageRateDefense
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Damage to pals multipiler
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   对好友倍增器造成伤害
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PlayerDamageRateAttack
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Damage from player multipiler
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   玩家倍增造成的伤害
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PlayerDamageRateDefense
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Damage to player multipiler
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   对玩家造成的伤害乘数
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PlayerStomachDecreaceRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Player hunger depletion rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   玩家饥饿消耗率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PlayerStaminaDecreaceRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Player stamina reduction rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   玩家体力减少率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PlayerAutoHPRegeneRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Player auto HP regeneration rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   玩家自动HP回复率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PlayerAutoHpRegeneRateInSleep
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Player sleep HP regeneration rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   玩家睡眠HP回复率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalStomachDecreaceRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal hunger depletion rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   伙伴饥饿消耗率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalStaminaDecreaceRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal stamina reduction rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   帕尔耐力减少率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalAutoHPRegeneRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal auto HP regeneration rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal自动HP回复率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalAutoHpRegeneRateInSleep
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal sleep health regeneration rate (in Palbox)
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Pal 睡眠健康恢复率（Palbox 中）
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   BuildObjectDamageRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Damage to structure multipiler
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   多层结构损坏
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   BuildObjectDeteriorationDamageRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Structure determination rate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   结构测定率
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   CollectionDropRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Getherable items multipiler
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   可收集物品倍增器
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   CollectionObjectHpRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Getherable objects HP multipiler
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   可收集的物体 HP 倍增器
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   CollectionObjectRespawnSpeedRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Getherable objects respawn interval
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   可收集物体的重生间隔
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   EnemyDropItemRate
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Dropped Items Multipiler
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   掉落物品倍增器
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   DeathPenalty
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Death penalty None : No lost, Item : Lost item without equipment, ItemAndEquipment : Lost item and equipment, All : Lost
-   All item, equipment, pal(in inventory)
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   死刑 None : 没有丢失， Item : 丢失的没有装备的物品， ItemAndEquipment : 丢失的物品和装备， All : 丢失所有物品、装备、朋友（库存中）
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   GuildPlayerMaxNum
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Max player of Guild
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   公会最大玩家数
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PalEggDefaultHatchingTime
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Time(h) to incubate massive egg
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   孵化大蛋的时间(h)
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   ServerPlayerMaxNum
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Maximum number of people who can join the server
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   服务器最多可加入人数
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   ServerName
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Server name
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   服务器名称
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   ServerDescription
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Server description
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   服务器描述
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   AdminPassword
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   AdminPassword
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   管理员密码
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   ServerPassword
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Set the server password.
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   设置服务器密码。
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PublicPort
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Public port number
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   公共端口号
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   PublicIP
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Public IP
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   公共IP
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   RCONEnabled
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Enable RCON
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   启用RCON
-   </div></div></td></tr><tr><td style="text-align:left"><div><div class="table-cell">
-   
-   RCONPort
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   Port number for RCON
-   </div></div></td><td style="text-align:left"><div><div class="table-cell">
-   
-   RCON 的端口号
-   </div></div></td></tr></tbody></table>
+| Difficulty                         | 英文                                                                                                                                                              | 机翻                                                                                      |
+|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| DayTimeSpeedRate                   | Day time speed                                                                                                                                                  | 白天速度                                                                                    |
+| NightTimeSpeedRate                 | Night time speed                                                                                                                                                | 夜间速度                                                                                    |
+| ExpRate                            | EXP rate                                                                                                                                                        | 经验率                                                                                     |
+| PalCaptureRate                     | Pal capture rate                                                                                                                                                | 好友捕获率                                                                                   |
+| PalSpawnNumRate                    | Pal appearance rate                                                                                                                                             | Pal出现率                                                                                  |
+| PalDamageRateAttack                | Damage from pals multipiler                                                                                                                                     | 好友倍增器造成的伤害                                                                              |
+| PalDamageRateDefense               | Damage to pals multipiler                                                                                                                                       | 对好友倍增器造成伤害                                                                              |
+| PlayerDamageRateAttack             | Damage from player multipiler                                                                                                                                   | 玩家倍增造成的伤害                                                                               |
+| PlayerDamageRateDefense            | Damage to player multipiler                                                                                                                                     | 对玩家造成的伤害乘数                                                                              |
+| PlayerStomachDecreaceRate          | Player hunger depletion rate                                                                                                                                    | 玩家饥饿消耗率                                                                                 |
+| PlayerStaminaDecreaceRate          | Player stamina reduction rate                                                                                                                                   | 玩家体力减少率                                                                                 |
+| PlayerAutoHPRegeneRate             | Player auto HP regeneration rate                                                                                                                                | 玩家自动HP回复率                                                                               |
+| PlayerAutoHpRegeneRateInSleep      | Player sleep HP regeneration rate                                                                                                                               | 玩家睡眠HP回复率                                                                               |
+| PalStomachDecreaceRate             | Pal hunger depletion rate                                                                                                                                       | 伙伴饥饿消耗率                                                                                 |
+| PalStaminaDecreaceRate             | Pal stamina reduction rate                                                                                                                                      | 帕尔耐力减少率                                                                                 |
+| PalAutoHPRegeneRate                | Pal auto HP regeneration rate                                                                                                                                   | Pal自动HP回复率                                                                              |
+| PalAutoHpRegeneRateInSleep         | Pal sleep health regeneration rate (in Palbox)                                                                                                                  | Pal 睡眠健康恢复率（Palbox 中）                                                                   |
+| BuildObjectDamageRate              | Damage to structure multipiler                                                                                                                                  | 多层结构损坏                                                                                  |
+| BuildObjectDeteriorationDamageRate | Structure determination rate                                                                                                                                    | 结构测定率                                                                                   |
+| CollectionDropRate                 | Getherable items multipiler                                                                                                                                     | 可收集物品倍增器                                                                                |
+| CollectionObjectHpRate             | Getherable objects HP multipiler                                                                                                                                | 可收集的物体 HP 倍增器                                                                           |
+| CollectionObjectRespawnSpeedRate   | Getherable objects respawn interval                                                                                                                             | 可收集物体的重生间隔                                                                              |
+| EnemyDropItemRate                  | Dropped Items Multipiler                                                                                                                                        | 掉落物品倍增器                                                                                 |
+| DeathPenalty                       | Death penalty None : No lost, Item : Lost item without equipment, ItemAndEquipment : Lost item and equipment, All : Lost All item, equipment, pal(in inventory) | 死刑 None : 没有丢失， Item : 丢失的没有装备的物品， ItemAndEquipment : 丢失的物品和装备， All : 丢失所有物品、装备、朋友（库存中） |
+| GuildPlayerMaxNum                  | Max player of Guild                                                                                                                                             | 公会最大玩家数                                                                                 |
+| PalEggDefaultHatchingTime          | Time(h) to incubate massive egg                                                                                                                                 | 孵化大蛋的时间(h)                                                                              |
+| ServerPlayerMaxNum                 | Maximum number of people who can join the server                                                                                                                | 服务器最多可加入人数                                                                              |
+| ServerName                         | Server name                                                                                                                                                     | 服务器名称                                                                                   |
+| ServerDescription                  | Server description                                                                                                                                              | 服务器描述                                                                                   |
+| AdminPassword                      | AdminPassword                                                                                                                                                   | 管理员密码                                                                                   |
+| ServerPassword                     | Set the server password                                                                                                                                         | 设置服务器密码                                                                                 |
+| PublicPort                         | Public port number                                                                                                                                              | 公共端口号                                                                                   |
+| PublicIP                           | Public IP                                                                                                                                                       | 公共IP                                                                                    |
+| RCONEnabled                        | Enable RCON                                                                                                                                                     | 启用RCON                                                                                  |
+| RCONPort                           | Port number for RCON                                                                                                                                            | RCON 的端口号                                                                               |
 
 ## 节约成本
 
