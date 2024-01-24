@@ -44,6 +44,9 @@
 1. 第一步：创建服务实例，创建服务实例。
    点击上方按钮“正式创建”，或单击[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-f99b27842d464c02846f)，进入服务实例部署界面，根据界面提示和自己的需求，选择相应套餐。
    ![1.jpg](1.jpg)
+   
+   在高级配置栏中配置联机服务的参数（不修改则使用默认值）。
+   ![14.jpg](14.jpg)
 
 2. 第二步：确认订单费用，完成支付。
    查看订单资源和相关费用，勾选服务协议，确认后点击“立即创建”。
@@ -76,18 +79,16 @@
 
 至此，您已经成功搭建了幻兽帕鲁 Dedicated Server ，请和您的朋友在此中一起畅快游玩吧～
 
-### 管理存档
+## 自动修改配置
 
-如果你原来在本地或者其他地方搭建过 Palworld 服务器，希望把存档转移到云服务器上，可以把对应的存档文件拷贝到对应的位置：
-   ```
-   /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/SaveGames
-   ```
-然后重启服务：
-  ```
-  systemctl restart pal-server
-  ```
+可以使用计算巢提供的升级服务实例功能进行自动修改配置:
+   ![16.jpg](16.png)
 
-### 修改配置
+修改配置参数值后点击**开始升级**：
+   ![17.jpg](17.png)
+
+
+## 手动修改配置
 
 1. 远程连接ECS实例
 
@@ -153,6 +154,20 @@
 | PublicIP                           | Public IP                                                                                                                                                       | 公共IP                                                                                    |
 | RCONEnabled                        | Enable RCON                                                                                                                                                     | 启用RCON                                                                                  |
 | RCONPort                           | Port number for RCON                                                                                                                                            | RCON 的端口号                                                                               |
+## 替换存档
+
+如果你原来在本地或者其他地方搭建过 Palworld 服务器，希望把存档转移到云服务器上，可以使用计算巢提供的替换存档功能： 
+1. 在运维管理中点击替换存档：
+   ![18.jpg](18.png)
+2. 上传存档包后点击下一步会直接开始替换存档。（需要本地上传存档压缩包（.tar文件），可以使用 tar -zcvf FileName.tar FilePath 命令打包）
+   ![19.jpg](19.png)
+
+## 服务版本升级
+   ![18.jpg](20.png)
+   ![18.jpg](21.png)
+   ![18.jpg](22.png)
+
+
 
 ## 节约成本
 
@@ -169,4 +184,4 @@
 
 您有任何问题或者建议，可以使用微信扫描二维码，加人我们的官方服务群，我们将非常欢迎您的建议和反馈～
 
-<img src="7.png" width="300" height="350" align="bottom"/>
+<img src="15.png" width="1000" height="250" align="bottom"/>
