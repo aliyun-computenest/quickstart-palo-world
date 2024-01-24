@@ -1,4 +1,4 @@
-# 计算巢1分钟部署幻兽帕鲁联机服务
+# 1分钟部署幻兽帕鲁联机服务
 
 ## 概述
 
@@ -42,7 +42,7 @@
 ### 部署服务
 
 1. 第一步：创建服务实例，创建服务实例。
-   点击上方按钮“正式创建”，或单击[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-f99b27842d464c02846f)，进入服务实例部署界面，根据界面提示和自己的需求，选择部署地域、付费类型、服务器实例、存储和带宽等参数。
+   点击上方按钮“正式创建”，或单击[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-f99b27842d464c02846f)，进入服务实例部署界面，根据界面提示和自己的需求，选择相应套餐。
    ![1.jpg](1.jpg)
 
 2. 第二步：确认订单费用，完成支付。
@@ -96,16 +96,18 @@
 2. 编辑文件
 
    ```
-   # 修改前注意备份
+   # 修改复制文件到目标目录
    cp /home/ecs-assist-user/.steam/SteamApps/common/PalServer/DefaultPalWorldSettings.ini /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
    ``` 
    
    ```
-   # 修改配置
+   # 执行修改配置文件的命令
    vim /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini 
    ```
    ![11.jpg](11.jpg)
-   修改完对应配置参数后保存：
+   如果不熟悉如何操作，请参考[教程](https://blog.csdn.net/wangyuxiang946/article/details/126560108)中的**编辑模式**部分。
+
+   移动光标找到要修改的位置，按键盘 i 键进入可编辑状态修改文件内容，修改完成按ESC键退出编辑状态，输入 :wq 回车保存文件。
    ![12.jpg](12.jpg)
 
    ```
@@ -114,7 +116,7 @@
    ```
    配置文件参数说明:
 
-| Difficulty                         | 英文                                                                                                                                                              | 机翻                                                                                      |
+| 参数                                 | 英文                                                                                                                                                              | 机翻                                                                                      |
 |------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
 | DayTimeSpeedRate                   | Day time speed                                                                                                                                                  | 白天速度                                                                                    |
 | NightTimeSpeedRate                 | Night time speed                                                                                                                                                | 夜间速度                                                                                    |
