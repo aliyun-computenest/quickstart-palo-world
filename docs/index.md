@@ -96,16 +96,18 @@
 2. 编辑文件
 
    ```
-   # 修改前注意备份
+   # 修改复制文件到目标目录
    cp /home/ecs-assist-user/.steam/SteamApps/common/PalServer/DefaultPalWorldSettings.ini /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
    ``` 
    
    ```
-   # 修改配置
+   # 执行修改配置文件的命令
    vim /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini 
    ```
    ![11.jpg](11.jpg)
-   移动光标找到要修改的位置，按键盘 i 键进入可编辑状态，修改文件内容后，按ESC键退出编辑状态，输入 wq 后回车保存：
+   如果不熟悉如何操作，请参考[教程](https://blog.csdn.net/wangyuxiang946/article/details/126560108)中的**编辑模式**部分。
+
+   移动光标找到要修改的位置，按键盘 i 键进入可编辑状态修改文件内容，修改完成按ESC键退出编辑状态，输入 :wq 回车保存文件。
    ![12.jpg](12.jpg)
 
    ```
