@@ -42,7 +42,7 @@
 ### 部署服务
 
 1. 第一步：创建服务实例，创建服务实例。
-   点击上方按钮“正式创建”，或单击[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-f99b27842d464c02846f)，进入服务实例部署界面，根据界面提示和自己的需求，选择部署地域、付费类型、服务器实例、存储和带宽等参数。
+   点击上方按钮“正式创建”，或单击[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-f99b27842d464c02846f)，进入服务实例部署界面，根据界面提示和自己的需求，选择相应套餐。
    ![1.jpg](1.jpg)
 
 2. 第二步：确认订单费用，完成支付。
