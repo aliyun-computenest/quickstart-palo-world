@@ -97,16 +97,19 @@
 
    ```
    # 修改前注意备份
-   cp /home/ecs-assist-user/.steam/SteamApps/common/PalServer/DefaultPalWorldSettings.ini /home/ecs-assist-user/. steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
-   ```
+   cp /home/ecs-assist-user/.steam/SteamApps/common/PalServer/DefaultPalWorldSettings.ini /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+   ``` 
    
    ```
    # 修改配置
    vim /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini 
    ```
-   
+   ![11.jpg](11.jpg)
+   修改完对应配置参数后保存：
+   ![12.jpg](12.jpg)
+
    ```
-   # 修改后重启服务
+   # 修改完成后重启服务
    sudo systemctl restart pal-server
    ```
    配置文件参数说明:
