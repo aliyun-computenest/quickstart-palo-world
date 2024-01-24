@@ -67,6 +67,17 @@
 
 至此，您已经成功搭建了幻兽帕鲁 Dedicated Server ，请和您的朋友在此中一起畅快游玩吧～
 
+### 管理存档
+
+如果你原来在本地或者其他地方搭建过 Palworld 服务器，希望把存档转移到云服务器上，可以把对应的存档文件拷贝到对应的位置：
+   ```
+   /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/SaveGames
+   ```
+然后重启服务：
+  ```
+  systemctl restart pal-server
+  ```
+
 ### 修改配置
 
 1. 远程连接ECS实例
@@ -77,10 +88,17 @@
 
    ```
    # 修改前注意备份
-   vim /home/ecs-assist-user/.steam/SteamApps/common/PalServer/DefaultPalWorldSettings.ini
+   cp /home/ecs-assist-user/.steam/SteamApps/common/PalServer/DefaultPalWorldSettings.ini /home/ecs-assist-user/. steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+   ```
    
+   ```
+   # 修改配置
+   vim /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini 
+   ```
+   
+   ```
    # 修改后重启服务
-   systemctl restart pal-server
+   sudo systemctl restart pal-server
    ```
    配置文件参数说明:
 
