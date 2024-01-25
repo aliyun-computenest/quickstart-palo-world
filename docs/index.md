@@ -68,19 +68,41 @@
 
 至此，您已经成功搭建了幻兽帕鲁 Dedicated Server ，请和您的朋友在此中一起畅快游玩吧～
 
-# Linux服务器
+## Linux服务器
 
-## 修改配置
-### 自动修改配置
+### 替换存档
+如果你原来在本地或者其他地方搭建过Palworld服务器，希望把存档转移到云服务器上，可以使用计算巢提供的功能替换存档文件（Saved文件）： 
+#### 自动替换
+说明：旧服务器存档路径:./Pal/Saved 打包成zip文件，如test.zip，zip文件可以用winzip打包
+1. 在运维管理中点击替换存档：
+   ![18.jpg](18.jpg)
+2. 上传存档包后点击下一步会直接开始替换存档。
+   ![19.jpg](19.jpg)
+3. 等待替换存档的任务执行完成，服务存档中的存档会替换成新存档。
+   ![100.jpg](100.jpg)
 
-可以使用计算巢提供的升级服务实例功能进行自动修改配置:
+#### 手动替换
+
+对应的存档文件拷贝到服务器对应的位置：
+   ```
+   /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/
+   ```
+然后重启服务：
+  ```
+  systemctl restart pal-server
+  ```
+
+### 修改配置
+#### 自动修改配置
+
+1. 使用计算巢提供的升级服务实例功能进行自动修改配置:
    ![16.jpg](16.png)
 
-修改配置参数值后点击**开始升级**：
+2. 修改配置参数值后点击**开始升级**：
    ![17.jpg](17.png)
 
 
-### 手动修改配置
+#### 手动修改配置
 
 1. 远程连接ECS实例
 
@@ -146,39 +168,19 @@
 | PublicIP                           | Public IP                                                                                                                                                       | 公共IP                                                                                    |
 | RCONEnabled                        | Enable RCON                                                                                                                                                     | 启用RCON                                                                                  |
 | RCONPort                           | Port number for RCON                                                                                                                                            | RCON 的端口号                                                                               |
-## 替换存档
-如果你原来在本地或者其他地方搭建过Palworld服务器，希望把存档转移到云服务器上，可以使用计算巢提供的功能替换： 
-### 自动替换
-说明：旧服务器存档路径:./Pal/Saved 打包成zip文件，如test.zip，zip文件可以用winzip打包
-1. 在运维管理中点击替换存档：
-   ![18.jpg](18.jpg)
-2. 上传存档包后点击下一步会直接开始替换存档。
-   ![19.jpg](19.jpg)
-3. 等待替换存档的任务执行完成，服务存档中的存档会替换成新存档。
-   ![100.jpg](100.jpg)
 
-### 手动替换
-
-如果你原来在本地或者其他地方搭建过 Palworld 服务器，希望把存档转移到云服务器上，可以把对应的存档文件拷贝到对应的位置：
-   ```
-   /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/SaveGames
-   ```
-然后重启服务：
-  ```
-  systemctl restart pal-server
-  ```
-# Windows服务器
-## 链接服务器
+## Windows服务器
+### 连接服务器
 1. 在计算巢服务实例详情页中点击远程链，免密登录。
    ![18.jpg](40.jpg)
 2. 使用公网链接，密码为创建服务实例时输入的密码。
    ![18.jpg](41.jpg)
 
-## 替换存档
+### 替换存档
 使用本地存档直接替换服务器中的存档（需要把Saved文件夹替换掉）
    ![18.jpg](36.jpg)
 
-## 修改配置
+### 修改配置
 1. 复制 C:\Program Files\PalServer\steam\steamapps\common\PalServer\DefaultPalWorldSettings.ini 的内容(如下)到 
 
    C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer\PalWorldSettings.ini ，然后根据需求修改。
