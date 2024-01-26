@@ -218,11 +218,15 @@ https://developer.aliyun.com/article/1428087
    ![9.jpg](9.jpg)
 
 ## 游戏存档
-### 创建存档
+### 快照
 1. 登录计算巢控制台，进入服务管理页面，点击服务实例ID，进入服务实例详情页面点击资源，找到ECS实例并进入详情页面。
    ![9.jpg](24.jpg)
 2. 点击**云盘**，然后给系统盘**创建快照**。
    ![9.jpg](25.jpg)
+### 手动下载
+[计算巢-幻兽帕鲁服务器存档拷贝到本机教程](https://developer.aliyun.com/article/1428619)
+### 手动上传
+[计算巢-幻兽帕鲁服务器存档本机上传到服务器教程](https://developer.aliyun.com/article/1428619)
 
 ### 自动存档
 
@@ -239,7 +243,10 @@ https://developer.aliyun.com/article/1428087
 4. 等待回滚云盘任务执行完成，启动ECS实例。
    ![9.jpg](35.jpg)
 
-
+### 删除存档
+rm /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/SaveGames
+#### 修改完成后重启服务
+sudo systemctl restart pal-server
 
 
 ## 官方支持
