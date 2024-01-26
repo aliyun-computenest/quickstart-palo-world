@@ -273,3 +273,7 @@ sudo systemctl restart pal-server
    ![23.jpg](29.JPG)
    ![23.jpg](30.JPG)
 
+### 变配服务实例报错
+如果出现类似的报错：
+{code: null, message: "ROS stack xxx ROLLBACK_COMPLETE: Resource UPDATE failed: StackValidationFailed: resources.InstanceRunCommand: i-xxx are not running. Command invocation only support running instances.", requestId: xxx}
+解决方案：需要先重启下ECS服务器，待ecs服务器启动完成后，再进行变配。
