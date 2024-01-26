@@ -83,10 +83,14 @@ https://developer.aliyun.com/article/1428087
 ### 替换存档
 参考[幻兽帕鲁服务器存档拷贝教程](https://developer.aliyun.com/article/1428619)手动替换
 
+### 清除存档（回档）
+存档清除后，重新启动游戏后将会自动重新开始新游戏。
+参考教程：[清除存档](https://developer.aliyun.com/article/1429017#slide-0)
+
 ### 修改配置
 #### 自动修改配置
 
-1. 使用计算巢提供的**变陪服务实例**功能自动修改:
+1. 使用计算巢提供的**变配服务实例**功能自动修改:
    ![16.jpg](16.png)
 
 2. 修改配置参数值后点击**确定**开始变配：
@@ -162,7 +166,7 @@ https://developer.aliyun.com/article/1428087
 
 ## Windows服务器
 ### 连接服务器
-1. 在计算巢服务实例详情页中点击远程链，免密登录。
+1. 在计算巢服务实例详情页中点击远程连接，免密登录。
    ![18.jpg](40.jpg)
 2. 使用公网链接，密码为创建服务实例时输入的密码。
    ![18.jpg](41.jpg)
@@ -170,6 +174,10 @@ https://developer.aliyun.com/article/1428087
 ### 替换存档
 参考[幻兽帕鲁服务器存档拷贝教程](https://developer.aliyun.com/article/1428619)手动替换
 
+
+### 清除存档（回档）
+存档清除后，重新启动游戏后将会自动重新开始新游戏。
+参考教程：[清除存档](https://developer.aliyun.com/article/1429017#slide-1)
 
 ### 修改配置
 1. 复制 C:\Program Files\PalServer\steam\steamapps\common\PalServer\DefaultPalWorldSettings.ini 的内容(如下)到 
@@ -195,34 +203,45 @@ https://developer.aliyun.com/article/1428087
 
 1. 若只是暂时不使用了可以在运维管理页面选择关机（节省停机模式），此时部分资源会被回收并停止收费，以降低相关费用、节约使用成本，下次使用再进行开机，操作如下：
    ![8.jpg](8.jpg)
-2. 若彻底不再使用了可以直接将服务实例删除，后续就不会再产生费用
-   ![9.jpg](9.jpg)
+2. 若彻底不再使用了可以直接将服务实例删除，后续就不会再产生费用。**需要注意**：如果创建时是选择的包年包月，则需要将服务实例先转为按量付费。
+   ![tran_to_postpay.png](tran_to_postpay.png)
 
 ## 游戏存档
-### 快照
+### 手动存档
+#### 方式1：ECS快照
 1. 登录计算巢控制台，进入服务管理页面，点击服务实例ID，进入服务实例详情页面点击资源，找到ECS实例并进入详情页面。
    ![9.jpg](24.jpg)
 2. 点击**云盘**，然后给系统盘**创建快照**。
    ![9.jpg](25.jpg)
-### 手动下载
+#### 方式2：手动执行
 [计算巢-幻兽帕鲁服务器存档拷贝到本机教程](https://developer.aliyun.com/article/1428619)
-### 手动上传
-[计算巢-幻兽帕鲁服务器存档本机上传到服务器教程](https://developer.aliyun.com/article/1428619)
 
 ### 自动存档
+#### ECS快照策略
+1. 登录计算巢控制台，进入服务管理页面，点击服务实例ID，进入服务实例详情页面点击资源，找到ECS实例并进入详情页面。
+   ![snapshot_auto1.png](snapshot_auto1.png)
+2. 点击**云盘**，然后给系统盘**创建快照策略**。
+   ![snapshot_auto2.png](snapshot_auto2.png)
+3. 设置自动快照策略，点击**新建自动快照策略**。
+   ![snapshot_auto3.png](snapshot_auto3.png)
+4. 新建自动快照策略，设置快照策略名称，快照周期，快照保留天数，点击**确定启用自动快照策略**，完成自动快照策略的创建。
+   ![snapshot_auto4.png](snapshot_auto4.png)
+5. 启用成功后可以看到已关联一个快照策略： 
+   ![snapshot_auto9.png](snapshot_auto9.png)
+
 
 ### 恢复存档
-1. 停止ECS实例，   
+参考文档：[使用快照回滚云盘](https://help.aliyun.com/zh/ecs/user-guide/roll-back-a-disk-by-using-a-snapshot)
+1. 停止ECS实例。
    ![9.jpg](32.jpg)
-
-2. 点击磁盘ID进入磁盘详情页。
-   ![9.jpg](31.jpg)
-
-3. 在云盘快照栏面点击**快照**，选择要恢复的快照，点击**回滚云盘**。
-   ![9.jpg](34.jpg)
-
-4. 等待回滚云盘任务执行完成，启动ECS实例。
-   ![9.jpg](35.jpg)
+   ![stop_ecs.png](stop_ecs.png)
+2. 实例停止后，点击快照进入详情页，然后选择对应时间点的快照后点击回滚云盘。
+   ![snapshot_auto5.png](snapshot_auto5.png)
+3. 勾选**回滚后立即启动实例**，等待回滚云盘任务执行完成，启动ECS实例。
+   ![snapshot_auto6.png](snapshot_auto6.png)
+   ![snapshot_auto7.png](snapshot_auto7.png)
+4. 回滚后实例待状态变为**运行中**，可以重新连接游戏。
+   ![snapshot_auto8.png](snapshot_auto8.png)
 
 ### 删除存档
 rm /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/SaveGames
