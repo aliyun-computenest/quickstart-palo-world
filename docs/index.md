@@ -81,26 +81,7 @@ https://developer.aliyun.com/article/1428087
 ## Linux服务器
 
 ### 替换存档
-如果你原来在本地或者其他地方搭建过Palworld服务器，希望把存档转移到云服务器上，可以使用计算巢提供的功能替换存档文件（Saved文件）： 
-#### 自动替换
-说明：旧服务器存档路径:./Pal/Saved 打包成zip文件，如test.zip，zip文件可以用winzip打包
-1. 在运维管理中点击替换存档：
-   ![18.jpg](18.jpg)
-2. 上传存档包后点击下一步会直接开始替换存档。
-   ![19.jpg](19.jpg)
-3. 等待替换存档的任务执行完成，服务器中的存档会替换成上传的存档。
-   ![100.jpg](100.jpg)
-
-#### 手动替换
-
-把本地存档文件拷贝到服务器对应的位置：
-   ```
-   /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/
-   ```
-然后重启服务：
-  ```
-  systemctl restart pal-server
-  ```
+参考[幻兽帕鲁服务器存档拷贝教程](https://developer.aliyun.com/article/1428619)手动替换
 
 ### 修改配置
 #### 自动修改配置
@@ -187,8 +168,8 @@ https://developer.aliyun.com/article/1428087
    ![18.jpg](41.jpg)
 
 ### 替换存档
-使用本地存档直接替换服务器中的存档（需要把Saved文件夹替换掉）
-   ![18.jpg](36.jpg)
+参考[幻兽帕鲁服务器存档拷贝教程](https://developer.aliyun.com/article/1428619)手动替换
+
 
 ### 修改配置
 1. 复制 C:\Program Files\PalServer\steam\steamapps\common\PalServer\DefaultPalWorldSettings.ini 的内容(如下)到 
