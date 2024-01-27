@@ -112,13 +112,15 @@ https://developer.aliyun.com/article/1428087
    
    ```
    # 执行修改配置文件的命令
-   vim /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini 
+   nano --softwrap /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini 
    ```
-   ![11.jpg](11.jpg)
-   如果不熟悉如何操作，请参考[教程](https://blog.csdn.net/wangyuxiang946/article/details/126560108)中的**编辑模式**部分。
+   ![11.png](11.png)
+   如果不熟悉如何操作，请参考[教程](https://www.cnblogs.com/linuxws/p/10996085.html)。
 
-   移动光标找到要修改的位置，按键盘 i 键进入可编辑状态修改文件内容，修改完成按ESC键退出编辑状态，输入 :wq 回车保存文件。
-   ![12.jpg](12.jpg)
+   移动光标找到要修改的位置进行编辑。编辑完成后按Ctrl+X退出，编辑器会询问是否保存修改，输入Y确认保存。
+   ![12.png](12.png)
+   编辑器提示保存的文件名，回车即可。
+   ![13.png](13.png)
 
    ```
    # 修改完成后重启服务
