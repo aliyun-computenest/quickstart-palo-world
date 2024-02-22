@@ -1,0 +1,209 @@
+FormatVersion: OOS-2019-06-01
+Description:
+  en: RestartPal-server。This task starts after the task is started, and restarts the pal-server service every day at the specified time. The task only needs to be executed once. If you need to re-select the scheduled restart time, please go to <a href="https://oos.console.aliyun.com/">The OOS Console</a> to cancel the task and then recreate it.
+  zh-cn: 定时重启服务。该任务启动后，每天在指定时间重启幻兽帕鲁服务。注意：该任务只需执行一次，若需要重新选择定时重启时间，请去<a href="https://oos.console.aliyun.com/">OOS控制台</a>取消该任务再重新创建。
+  name-en: Restart pal-server
+  name-zh-cn: 定时重启服务
+Parameters:
+  OOSAssumeRole:
+    Label:
+      en: OOSAssumeRole
+      zh-cn: OOS扮演的RAM角色
+    Type: String
+    Default: OOSServiceRole
+  regionId:
+    Type: String
+    Label:
+      en: RegionId
+      zh-cn: 地域ID
+    AssociationProperty: RegionId
+    Default: '{{ ACS::RegionId }}'
+  targets:
+    Label:
+      en: TargetInstance
+      zh-cn: 目标实例
+    Type: Json
+    AssociationProperty: Targets
+    AssociationPropertyMetadata:
+      ResourceType: ALIYUN::ECS::Instance
+      RegionId: regionId
+      AcceptFileSuffixes: .zip
+  dailyRestartTime:
+    Label:
+      en: DailyStartTime
+      zh-cn: 每天重启实例的时间
+    Type: String
+    AllowedValues:
+      - '01:00:00'
+      - '04:00:00'
+      - '06:00:00'
+  triggerEndDate:
+    Label:
+      en: TriggerEndDate
+      zh-cn: 时间触发器结束时间
+    Description:
+      en: 'Format: yyyy-MM-ddTHH:mm:ssZ.'
+      zh-cn: 格式：yyyy-MM-ddTHH:mm:ssZ
+    Type: String
+    AssociationProperty: DateTime
+    AssociationPropertyMetadata:
+      Format: YYYY-MM-DDTHH:mm:ssZ
+    Default: '2024-12-31T00:00:00Z'
+Tasks:
+  - Name: timerTrigger
+    Action: ACS::TimerTrigger
+    Description:
+      en: Triggers a task as scheduled by specifying Cron expression
+      zh-cn: 通过指定Cron表达式按计划触发任务
+    Properties:
+      Type: cron
+      EndDate: '{{ triggerEndDate }}'
+      TimeZone: Asia/Shanghai
+      Expression:
+        Fn::Join:
+          - ' '
+          - - '0'
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - ':'
+                    - '{{ dailyRestartTime }}'
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - ':'
+                    - '{{ dailyRestartTime }}'
+            - '?'
+            - '*'
+            - '*'
+  - Name: getInstance
+    Description:
+      en: Views the ECS instances
+      zh-cn: 获取ECS实例
+    Action: ACS::SelectTargets
+    Properties:
+      ResourceType: ALIYUN::ECS::Instance
+      RegionId: '{{ regionId }}'
+      Filters:
+        - '{{ targets }}'
+    Outputs:
+      instanceIds:
+        Type: List
+        ValueSelector: Instances.Instance[].InstanceId
+  - Name: queryInstanceOSType
+    Action: ACS::ExecuteApi
+    Description:
+      en: Queries ECS instance OS type
+      zh-cn: 获取ECS实例操作系统类型
+    Properties:
+      Service: ECS
+      API: DescribeInstances
+      Parameters:
+        RegionId: '{{ regionId }}'
+        InstanceIds:
+          - Fn::Select:
+              - 0
+              - '{{ getInstance.instanceIds }}'
+    Outputs:
+      OSType:
+        Type: String
+        ValueSelector: Instances.Instance[].OSType
+  - Name: RunCommandForLinux
+    When:
+      Fn::Equals:
+        - '{{ queryInstanceOSType.OSType }}'
+        - linux
+    Action: ACS::ECS::RunCommand
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 下载文件到实例并执行命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ ACS::TaskLoopItem }}'
+      commandType: RunShellScript
+      username: ecs-assist-user
+      workingDir: /home/ecs-assist-user
+      commandContent: |-
+        #!/bin/bash
+        destinationDir="/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved"
+        backupDir="/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved_Backup"
+
+        # 生成备份文件的名称，包含日期以便于区分不同的备份
+        timestamp=$(date +"%Y%m%d%H%M%S")
+        backupFileName="Saved_Backup_${timestamp}.zip"
+
+        # 创建备份目录，如果不存在的话
+        mkdir -p "$backupDir"
+
+        # 打包指定目录到ZIP文件
+        zip -r "$backupDir/$backupFileName" "$destinationDir"
+        sudo systemctl restart pal-server
+    Loop:
+      Items: '{{ getInstance.instanceIds }}'
+  - Name: RunCommandForWindows
+    When:
+      Fn::Equals:
+        - '{{ queryInstanceOSType.OSType }}'
+        - windows
+    Action: ACS::ECS::RunCommand
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 下载文件到实例并执行命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ ACS::TaskLoopItem }}'
+      commandType: RunPowerShellScript
+      commandContent: |-
+        $TaskName = "PalServerAutoStart"
+        $destinationDir = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved"
+        $savedParentDir = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal"
+        # 定义备份目录，确保它不在源目录的子目录中
+        $backupDir = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved_Backup"
+
+        # 生成备份文件的名称，包含日期以便于区分不同的备份
+        $timestamp = Get-Date -Format "yyyyMMddHHmmss"
+        $backupFileName = "Saved_Backup_$timestamp.zip"
+
+        # 创建备份目录，如果不存在的话
+        if (-not (Test-Path -Path $backupDir)) {
+            New-Item -ItemType Directory -Path $backupDir
+        }
+
+        # 打包指定目录到ZIP文件
+        Compress-Archive -Path $destinationDir -DestinationPath "$backupDir\$backupFileName"
+        #关机
+
+        $ProcessName = "PalServer-Win64-Test-Cmd"
+
+        if (Get-Process -Name $ProcessName -ErrorAction SilentlyContinue) {
+          Stop-Process -Name $ProcessName -Force
+          Start-Sleep -Seconds 1
+        }
+        #开机      
+        $TaskName = "PalServerAutoStart"
+        Start-ScheduledTask -TaskName $TaskName
+    Loop:
+      Items: '{{ getInstance.instanceIds }}'
+RamRole: '{{ OOSAssumeRole }}'
+Metadata:
+  ALIYUN::OOS::Interface:
+    ParameterGroups:
+      - Parameters:
+          - regionId
+          - targets
+        Label:
+          default:
+            zh-cn: 选择实例
+            en: Select Instances
+      - Parameters:
+          - dailyRestartTime
+          - triggerEndDate
+        Label:
+          default:
+            zh-cn: 定时重启
+            en: Scheduled Restart
+      - Parameters:
+          - OOSAssumeRole
+        Label:
+          default:
+            zh-cn: ram角色

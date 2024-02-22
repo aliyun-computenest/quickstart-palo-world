@@ -1,0 +1,97 @@
+FormatVersion: OOS-2019-06-01
+Description:
+  en: Upgrade Server Version
+  zh-cn: 升级服务端版本
+  name-en: Upgrade Server Version
+  name-zh-cn: 升级服务端版本
+Parameters:
+  regionId:
+    Type: String
+    Label:
+      en: RegionId
+      zh-cn: 地域ID
+    AssociationProperty: RegionId
+    Default: '{{ ACS::RegionId }}'
+  targets:
+    Label:
+      en: TargetInstance
+      zh-cn: 目标实例
+    Type: Json
+    AssociationProperty: Targets
+    AssociationPropertyMetadata:
+      ResourceType: 'ALIYUN::ECS::Instance'
+      RegionId: regionId
+Tasks:
+  - Name: getInstance
+    Description:
+      en: Views the ECS instances
+      zh-cn: 获取ECS实例
+    Action: 'ACS::SelectTargets'
+    Properties:
+      ResourceType: 'ALIYUN::ECS::Instance'
+      RegionId: '{{ regionId }}'
+      Filters:
+        - '{{ targets }}'
+    Outputs:
+      instanceId:
+        Type: String
+        ValueSelector: 'Instances.Instance[].InstanceId'
+      OSType:
+        Type: String
+        ValueSelector: 'Instances.Instance[].OSType'
+  - Name: runLinuxCommand
+    Action: ACS::ECS::RunCommand
+    When:
+      'Fn::Equals':
+        - '{{ getInstance.OSType }}'
+        - linux
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 下载文件到实例并执行命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ getInstance.instanceId }}'
+      commandType: RunShellScript
+      username: ecs-assist-user
+      workingDir: /home/ecs-assist-user
+      timeout: 3600
+      commandContent: |-
+        #!/bin/bash
+        # 下载存档包到实例
+        /usr/games/steamcmd +login anonymous +app_update 2394010 validate +quit
+        sudo systemctl restart pal-server
+  - Name: runWindowsCommand
+    Action: ACS::ECS::RunCommand
+    When:
+      'Fn::Equals':
+        - '{{ getInstance.OSType }}'
+        - windows
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 下载文件到实例并执行命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ getInstance.instanceId }}'
+      commandType: RunPowerShellScript
+      timeout: 3600
+      commandContent: |-
+        $TaskName = "PalServerAutoStart"
+        $ProcessName = "PalServer-Win64-Test-Cmd"
+
+        if (Get-Process -Name $ProcessName -ErrorAction SilentlyContinue) {
+            Stop-Process -Name $ProcessName -Force
+            Start-Sleep -Seconds 1
+        }
+
+        & "C:\Program Files\PalServer\steam\steamcmd.exe" +login anonymous +app_update 2394010 validate +quit
+        Start-ScheduledTask -TaskName $TaskName
+Metadata:
+  ALIYUN::OOS::Interface:
+    ParameterGroups:
+      - Parameters:
+          - regionId
+          - targets
+        Label:
+          default:
+            zh-cn: 选择实例
+            en: Select Instances

@@ -1,0 +1,139 @@
+FormatVersion: OOS-2019-06-01
+Description:
+  en: Remove pal-server saved
+  zh-cn: Remove pal-server saved
+  name-en: Remove pal-server saved
+  name-zh-cn: 清除存档
+Parameters:
+  regionId:
+    Type: String
+    Label:
+      en: RegionId
+      zh-cn: 地域ID
+    AssociationProperty: RegionId
+    Default: '{{ ACS::RegionId }}'
+  targets:
+    Label:
+      en: TargetInstance
+      zh-cn: 目标实例
+    Type: Json
+    AssociationProperty: Targets
+    AssociationPropertyMetadata:
+      ResourceType: 'ALIYUN::ECS::Instance'
+      RegionId: regionId
+      AcceptFileSuffixes: .zip
+Tasks:
+  - Name: getInstance
+    Description:
+      en: Views the ECS instances
+      zh-cn: 获取ECS实例
+    Action: 'ACS::SelectTargets'
+    Properties:
+      ResourceType: 'ALIYUN::ECS::Instance'
+      RegionId: '{{ regionId }}'
+      Filters:
+        - '{{ targets }}'
+    Outputs:
+      instanceIds:
+        Type: List
+        ValueSelector: 'Instances.Instance[].InstanceId'
+  - Name: queryInstanceOSType
+    Action: 'ACS::ExecuteApi'
+    Description:
+      en: Queries ECS instance OS type
+      zh-cn: 获取ECS实例操作系统类型
+    Properties:
+      Service: ECS
+      API: DescribeInstances
+      Parameters:
+        RegionId: '{{ regionId }}'
+        InstanceIds:
+          - Fn::Select:
+              - 0
+              - '{{ getInstance.instanceIds }}'
+    Outputs:
+      OSType:
+        Type: String
+        ValueSelector: 'Instances.Instance[].OSType'
+  - Name: RunCommandForLinux
+    When:
+      'Fn::Equals':
+        - '{{ queryInstanceOSType.OSType }}'
+        - linux
+    Action: ACS::ECS::RunCommand
+    Description:
+      en: execute linux remove saved file
+      zh-cn: 执行linux清档命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ ACS::TaskLoopItem }}'
+      commandType: RunShellScript
+      username: ecs-assist-user
+      workingDir: /home/ecs-assist-user
+      commandContent: |-
+        #!/bin/bash
+        sudo systemctl stop pal-server
+        backupPath="/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved_Backup"
+        destPath="$backupPath/Saved-Clear"
+        mkdir -p $backupPath
+        # 目的地址已存在先进行删除
+        if [ -d "$destPath" ]; then
+          rm -r "$destPath"
+          echo "$destPath deleted"
+        fi
+        mv /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved $destPath
+        sudo systemctl start pal-server
+    Loop:
+      Items: '{{ getInstance.instanceIds }}'
+  - Name: RunCommandForWindows
+    When:
+      'Fn::Equals':
+        - '{{ queryInstanceOSType.OSType }}'
+        - windows
+    Action: ACS::ECS::RunCommand
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 执行windows清档命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ ACS::TaskLoopItem }}'
+      commandType: RunPowerShellScript
+      commandContent: |-
+        $TaskName = "PalServerAutoStart"
+        $ProcessName = "PalServer-Win64-Test-Cmd"
+
+        if (Get-Process -Name $ProcessName -ErrorAction SilentlyContinue) {
+            Stop-Process -Name $ProcessName -Force
+            Start-Sleep -Seconds 1
+        }
+
+        $sourcePath = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved"
+        $backupPath = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved_Backup"
+        $destPath = $backupPath + "\Saved-Clear"
+        
+        # 创建备份目录，如果不存在的话
+        if (-not (Test-Path -Path $backupPath)) {
+            New-Item -ItemType Directory -Path $backupPath
+        }
+
+        # 确保目标路径存在
+        if (Test-Path -Path $destPath) {
+            # 删除现有的Saved目录
+            Remove-Item -Path $destPath -Recurse -Force
+        }
+        Move-Item -Path $sourcePath -Destination $destPath    
+
+        # 启动
+        Start-ScheduledTask -TaskName $TaskName
+    Loop:
+      Items: '{{ getInstance.instanceIds }}'
+Metadata:
+  ALIYUN::OOS::Interface:
+    ParameterGroups:
+      - Parameters:
+          - regionId
+          - targets
+        Label:
+          default:
+            zh-cn: 选择实例
+            en: Select Instances

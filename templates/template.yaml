@@ -1,0 +1,1462 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Description:
+  en: Deploy palworld service
+  zh-cn: 部署幻兽帕鲁游戏服务
+Parameters:
+  PayType:
+    Type: String
+    Label:
+      en: ECS Instance Charge Type
+      zh-cn: 付费类型
+    AssociationProperty: ChargeType
+    AssociationPropertyMetadata:
+      LocaleKey: InstanceChargeType
+    Default: PrePaid
+    AllowedValues:
+      - PostPaid
+      - PrePaid
+  PayPeriodUnit:
+    Type: String
+    Label:
+      en: Pay Period Unit
+      zh-cn: 购买资源时长周期
+    AssociationProperty: PayPeriodUnit
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        Month: 月
+        Year: 年
+      Visible:
+        Condition:
+          Fn::Not:
+            Fn::Equals:
+              - ${PayType}
+              - PostPaid
+    Default: Month
+    AllowedValues:
+      - Month
+  PayPeriod:
+    Type: Number
+    Label:
+      en: Period
+      zh-cn: 购买资源时长
+    AssociationProperty: PayPeriod
+    AssociationPropertyMetadata:
+      Visible:
+        Condition:
+          Fn::Not:
+            Fn::Equals:
+              - ${PayType}
+              - PostPaid
+    Default: 1
+    AllowedValues:
+      - 1
+      - 3
+      - 6
+  EcsInstanceType:
+    Type: String
+    Label:
+      en: Instance Type
+      zh-cn: 实例类型
+    AssociationProperty: ALIYUN::ECS::Instance::InstanceType
+    AssociationPropertyMetadata:
+      ZoneId: ${ZoneId}
+      InstanceChargeType: ${PayType}
+  SystemDiskCategory:
+    Type: String
+    AllowedValues:
+      - cloud_efficiency
+      - cloud_essd
+      - cloud_essd_entry
+    Label:
+      en: System Disk Category
+      zh-cn: 系统盘类型
+    AssociationPropertyMetadata:
+      LocaleKey: DiskCategory
+  SystemDiskSize:
+    Type: Number
+    Label:
+      zh-cn: 系统盘空间 (GB)
+      en: System Disk Space (GB)
+    MinValue: 40
+    MaxValue: 2000
+  InternetChargeType:
+    Type: String
+    Label:
+      zh-cn: 带宽付费类型
+      en: Internet Charge Type
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        PayByTraffic: 按流量计费
+        PayByBandwidth: 按固定带宽计费
+    AllowedValues:
+      - PayByBandwidth
+      - PayByTraffic
+  InternetMaxBandwidthOut:
+    Type: Number
+    Label:
+      zh-cn: 公网带宽 (Mbps)
+      en: Internet Max Bandwidth Out (Mbps)
+    MinValue: 1
+    MaxValue: 100
+  InstancePassword:
+    Type: String
+    Label:
+      en: Instance Password
+      zh-cn: 实例密码
+    Description:
+      en: Server login password, Length 8-30, must contain three(Capital letters,
+        lowercase letters, numbers, ()`~!@#$%^&*_-+=|{}[]:;'<>,.?/ Special symbol
+        in)
+      zh-cn: 服务器登录密码,长度8-30，必须包含三项（大写字母、小写字母、数字、 ()`~!@#$%^&*_-+=|{}[]:;'<>,.?/ 中的特殊符号）
+    AssociationProperty: ALIYUN::ECS::Instance::Password
+    AssociationPropertyMetadata:
+      OSType: ${OSType}
+    NoEcho: true
+  OSType:
+    Type: String
+    Label:
+      en: os type
+      zh-cn: 操作系统类型
+    AllowedValues:
+      - linux
+      - windows
+    Default: windows
+  ZoneId:
+    Type: String
+    Label:
+      en: Availability Zone
+      zh-cn: 可用区
+    AssociationProperty: ALIYUN::ECS::Instance::ZoneId
+    AssociationPropertyMetadata:
+      DefaultValueStrategy: diamond
+      InstanceType: ${EcsInstanceType}
+      SystemDiskCategory: ${SystemDiskCategory}
+      InstanceChargeType: ${PayType}
+  # 环境变量设置
+  ServerName:
+    Type: String
+    Label:
+      en: Server Name
+      zh-cn: 服务器名称
+    Description:
+      en: ServerName
+      zh-cn: ServerName
+    Default: "Default Palworld Server"
+    AllowedPattern: '^[A-Za-z0-9\ ]*$'
+    ConstraintDescription:
+      zh-cn: '只允许大写字母、小写字母、数字和空格，不允许包含特殊符号'
+      en: >-
+        Only uppercase letters, lowercase letters, numbers, and Spaces are allowed, and special symbols are not allowed
+  ServerDescription:
+    Type: String
+    Label:
+      en: Server Description
+      zh-cn: 服务器描述
+    Description:
+      en: ServerDescription
+      zh-cn: ServerDescription
+    Default: ""
+    AllowedPattern: "^[A-Za-z0-9\ ]*$"
+    ConstraintDescription:
+      zh-cn: '只允许大写字母、小写字母、数字和空格，不允许包含特殊符号'
+      en: >-
+        Only uppercase letters, lowercase letters, numbers, and Spaces are allowed, and special symbols are not allowed
+  ServerPlayerMaxNum:
+    Type: Number
+    Label:
+      en: Server Password
+      zh-cn: 服务器最多可加入人数
+    Description:
+      en: ServerPlayerMaxNum
+      zh-cn: ServerPlayerMaxNum
+    Default: 32
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 1
+  Difficulty:
+    Type: String
+    Label:
+      en: Difficulty
+      zh-cn: 困难程度
+    Description:
+      en: Difficulty
+      zh-cn: Difficulty，游戏的具体难易程度由其他参数组合而来，与此参数的关系不大，选择None即可
+    Default: "None"
+    AllowedPattern: "^[A-Za-z0-9\ ]+$"
+    AllowedValues:
+      - None
+      - Easy
+      - Normal
+      - Hard
+  DayTimeSpeedRate:
+    Type: Number
+    Label:
+      en: Day time speed
+      zh-cn: 白天流逝速度
+    Description:
+      en: DayTimeSpeedRate
+      zh-cn: DayTimeSpeedRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MaxValue: 5.0
+    MinValue: 0.1
+  NightTimeSpeedRate:
+    Type: Number
+    Label:
+      en: Night time speed
+      zh-cn: 夜间流逝速度
+    Default: "1.000000"
+    Description:
+      en: NightTimeSpeedRate
+      zh-cn: NightTimeSpeedRate
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MaxValue: 5.0
+    MinValue: 0.1
+  ExpRate:
+    Type: Number
+    Label:
+      en: EXP rate
+      zh-cn: 经验值倍率
+    Default: "1.000000"
+    Description:
+      en: ExpRate
+      zh-cn: ExpRate
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MaxValue: 20.0
+    MinValue: 0.1
+  PalCaptureRate:
+    Type: Number
+    Label:
+      en: Pal capture rate
+      zh-cn: 帕鲁抓捕机率
+    Description:
+      en: PalCaptureRate
+      zh-cn: PalCaptureRate，此参数的灵敏度较高，容易影响游戏难易程度，通常困难模式下取值为0.8, 简单模式下为2
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MaxValue: 2.0
+    MinValue: 0.5
+  PalSpawnNumRate:
+    Type: Number
+    Label:
+      en: Pal appearance rate
+      zh-cn: 帕鲁的出现率
+    Description:
+      en: PalSpawnNumRate
+      zh-cn: PalSpawnNumRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.5
+    MaxValue: 3.0
+  PalDamageRateAttack:
+    Type: Number
+    Label:
+      en: Damage from pals multipiler
+      zh-cn: 帕鲁造成的伤害倍率
+    Description:
+      en: PalDamageRateAttack
+      zh-cn: PalDamageRateAttack
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PalDamageRateDefense:
+    Type: Number
+    Label:
+      en: Damage to pals multipiler
+      zh-cn: 帕鲁受到的伤害倍率
+    Description:
+      en: PalDamageRateDefense
+      zh-cn: PalDamageRateDefense
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PlayerDamageRateAttack:
+    Type: Number
+    Label:
+      en: Damage from player multipiler
+      zh-cn: 玩家造成的伤害倍率
+    Description:
+      en: PlayerDamageRateAttack
+      zh-cn: PlayerDamageRateAttack
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PlayerDamageRateDefense:
+    Type: Number
+    Label:
+      en: Damage to player multipiler
+      zh-cn: 玩家受到的伤害倍率
+    Description:
+      en: PlayerDamageRateDefense
+      zh-cn: PlayerDamageRateDefense
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PlayerStomachDecreaceRate:
+    Type: Number
+    Label:
+      en: Player hunger depletion rate
+      zh-cn: 玩家饱足感的下降速率
+    Description:
+      en: PlayerStomachDecreaceRate
+      zh-cn: PlayerStomachDecreaceRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PlayerStaminaDecreaceRate:
+    Type: Number
+    Label:
+      en: Player stamina reduction rate
+      zh-cn: 玩家耐力的下降速率
+    Description:
+      en: PlayerStaminaDecreaceRate
+      zh-cn: PlayerStaminaDecreaceRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PlayerAutoHPRegeneRate:
+    Type: Number
+    Label:
+      en: Player auto HP regeneration rate
+      zh-cn: 玩家生命值自然恢复速率
+    Description:
+      en: PlayerAutoHPRegeneRate
+      zh-cn: PlayerAutoHPRegeneRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PlayerAutoHpRegeneRateInSleep:
+    Type: Number
+    Label:
+      en: Player sleep HP regeneration rate
+      zh-cn: 玩家睡眠时生命值恢复速率
+    Description:
+      en: PlayerAutoHpRegeneRateInSleep
+      zh-cn: PlayerAutoHpRegeneRateInSleep
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PalStomachDecreaceRate:
+    Type: Number
+    Label:
+      en: Pal hunger depletion rate
+      zh-cn: 帕鲁饱足感的下降速率
+    Description:
+      en: PalStomachDecreaceRate
+      zh-cn: PalStomachDecreaceRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PalStaminaDecreaceRate:
+    Type: Number
+    Label:
+      en: Pal stamina reduction rate
+      zh-cn: 帕鲁耐力的下降速率
+    Description:
+      en: PalStaminaDecreaceRate
+      zh-cn: PalStaminaDecreaceRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PalAutoHPRegeneRate:
+    Type: Number
+    Label:
+      en: Pal auto HP regeneration rate
+      zh-cn: 帕鲁生命值自然恢复倍率
+    Description:
+      en: PalAutoHPRegeneRate
+      zh-cn: PalAutoHPRegeneRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  PalAutoHpRegeneRateInSleep:
+    Type: Number
+    Label:
+      en: Pal sleep health regeneration rate (in Palbox)
+      zh-cn: 帕鲁睡眠时生命值恢复倍率
+    Description:
+      en: PalAutoHpRegeneRateInSleep
+      zh-cn: PalAutoHpRegeneRateInSleep
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.1
+    MaxValue: 5
+  BuildObjectDamageRate:
+    Type: Number
+    Label:
+      en: Damage to structure multipiler
+      zh-cn: 对建筑物的伤害倍率
+    Description:
+      en: BuildObjectDamageRate
+      zh-cn: BuildObjectDamageRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.5
+    MaxValue: 3
+  BuildObjectDeteriorationDamageRate:
+    Type: Number
+    Label:
+      en: Structure determination rate
+      zh-cn: 建筑物的劣化速率
+    Description:
+      en: BuildObjectDeteriorationDamageRate
+      zh-cn: BuildObjectDeteriorationDamageRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0
+    MaxValue: 10
+  CollectionDropRate:
+    Type: Number
+    Label:
+      en: Getherable items multipiler
+      zh-cn: 资源采集量倍率
+    Description:
+      en: CollectionDropRate
+      zh-cn: CollectionDropRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.5
+    MaxValue: 3
+  CollectionObjectHpRate:
+    Type: Number
+    Label:
+      en: Getherable objects HP multipiler
+      zh-cn: 采集资源的生命值倍率
+    Description:
+      en: CollectionObjectHpRate
+      zh-cn: CollectionObjectHpRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.5
+    MaxValue: 3
+  CollectionObjectRespawnSpeedRate:
+    Type: Number
+    Label:
+      en: Getherable objects respawn interval
+      zh-cn: 采集资源的刷新间隔
+    Description:
+      en: CollectionObjectRespawnSpeedRate
+      zh-cn: CollectionObjectRespawnSpeedRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.5
+    MaxValue: 3
+  EnemyDropItemRate:
+    Type: Number
+    Label:
+      en: Dropped Items Multipiler
+      zh-cn: 敌人掉落物品倍率
+    Description:
+      en: EnemyDropItemRate
+      zh-cn: EnemyDropItemRate
+    Default: "1.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0.5
+    MaxValue: 3
+  DeathPenalty:
+    Type: String
+    Label:
+      en: "Death penalty None : No lost, Item : Lost item without equipment, ItemAndEquipment : Lost item and equipment, All : Lost All item, equipment, pal(in inventory)"
+      zh-cn: "死亡惩罚"
+    Description:
+      en: DeathPenalty
+      zh-cn: DeathPenalty
+    Default: "None"
+    AllowedValues:
+      - None
+      - Item
+      - ItemAndEquipment
+      - All
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        None: 死亡不掉落
+        Item: 死亡掉物品
+        ItemAndEquipment: 死亡掉物品和装备
+        All: 全部掉
+  bEnablePlayerToPlayerDamage:
+    Type: String
+    Label:
+      en: Whether to allow player causes damage to the player
+      zh-cn: 是否允许玩家对玩家造成伤害
+    Description:
+      en: bEnablePlayerToPlayerDamage
+      zh-cn: bEnablePlayerToPlayerDamage
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bEnableFriendlyFire:
+    Type: String
+    Label:
+      en: Whether to allow players to do damage to their own Pal and fellow Guild players
+      zh-cn: 是否允许玩家对自己帕鲁和同公会玩家的伤害
+    Description:
+      en: bEnableFriendlyFire
+      zh-cn: bEnableFriendlyFire
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bEnableInvaderEnemy:
+    Type: String
+    Label:
+      en: Whether to attack the enemy
+      zh-cn: 是否允许袭击敌人
+    Description:
+      en: bEnableInvaderEnemy
+      zh-cn: bEnableInvaderEnemy
+    Default: "True"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bActiveUNKO:
+    Type: String
+    Label:
+      en: Whether to active the UNKO event
+      zh-cn: 是否开启神秘的UNKO事件
+    Description:
+      en: bActiveUNKO
+      zh-cn: bActiveUNKO
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bEnableAimAssistPad:
+    Type: String
+    Label:
+      en: Whether to enable handle aiming assist
+      zh-cn: 是否启用手柄辅助瞄准
+    Description:
+      en: bEnableAimAssistPad
+      zh-cn: bEnableAimAssistPad
+    Default: "True"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bEnableAimAssistKeyboard:
+    Type: String
+    Label:
+      en: Whether keyboard and mouse assisted aiming is enabled
+      zh-cn: 是否启用键鼠辅助瞄准
+    Description:
+      en: bEnableAimAssistKeyboard
+      zh-cn: bEnableAimAssistKeyboard
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  DropItemMaxNum:
+    Type: Number
+    Label:
+      en: The maximum amount of dropped objects in the world
+      zh-cn: 世界内的掉落物上限
+    Description:
+      en: DropItemMaxNum
+      zh-cn: DropItemMaxNum
+    Default: "3000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 1
+      UseSlider: true
+  DropItemMaxNum_UNKO:
+    Type: Number
+    Label:
+      en: The maximum amount of UNKO dropped objects in the world
+      zh-cn: 神秘UNKO掉落物上限
+    Default: "100"
+    Description:
+      en: DropItemMaxNum_UNKO
+      zh-cn: DropItemMaxNum_UNKO
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 1
+      UseSlider: true
+  BaseCampMaxNum:
+    Type: Number
+    Label:
+      en: Base maximum
+      zh-cn: 基地最大数量
+    Description:
+      en: BaseCampMaxNum
+      zh-cn: BaseCampMaxNum
+    Default: "128"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 1
+      UseSlider: true
+  BaseCampWorkerMaxNum:
+    Type: Number
+    Label:
+      en: Maximum number of palu working within the base
+      zh-cn: 基地内工作帕鲁的最大数量
+    Description:
+      en: BaseCampWorkerMaxNum
+      zh-cn: BaseCampWorkerMaxNum
+    Default: 15
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 1
+      UseSlider: true
+  DropItemAliveMaxHours:
+    Type: Number
+    Label:
+      en: Retention time of dropped items
+      zh-cn: 掉落物品的保留时间
+    Description:
+      en: DropItemAliveMaxHours
+      zh-cn: DropItemAliveMaxHours, 建议该值不要设置的过大，避免掉落物太多造成卡顿
+    Default: "1"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 1
+      UseSlider: true
+  bAutoResetGuildNoOnlinePlayers:
+    Type: String
+    Label:
+      en: Whether to automatically help the player quit the guild
+      zh-cn: 是否自动帮玩家退出公会
+    Description:
+      en: bAutoResetGuildNoOnlinePlayers
+      zh-cn: bAutoResetGuildNoOnlinePlayers
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  AutoResetGuildTimeNoOnlinePlayers:
+    Type: Number
+    Label:
+      en: Time(h) to help the player exit the guild
+      zh-cn: 自动帮玩家退出公会的时间
+    Description:
+      en: AutoResetGuildTimeNoOnlinePlayers
+      zh-cn: AutoResetGuildTimeNoOnlinePlayers
+    Default: "72.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0
+    MaxValue: 240
+  bIsMultiplay:
+    Type: String
+    Label:
+      en: Whether Multiplayer game
+      zh-cn: 是否多人游戏
+    Description:
+      en: bIsMultiplay
+      zh-cn: bIsMultiplay
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bIsPvP:
+    Type: String
+    Label:
+      en: Whether PvP model
+      zh-cn: 是否PvP模式
+    Description:
+      en: bIsPvP
+      zh-cn: bIsPvP
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bCanPickupOtherGuildDeathPenaltyDrop:
+    Type: String
+    Label:
+      en: Whether to pick up death drops from other guilds
+      zh-cn: 是否捡取其他公会的死亡掉落物
+    Description:
+      en: bCanPickupOtherGuildDeathPenaltyDrop
+      zh-cn: bCanPickupOtherGuildDeathPenaltyDrop
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bEnableNonLoginPenalty:
+    Type: String
+    Label:
+      en: Whether to enable non-login penalties
+      zh-cn: 是否启用非登录惩罚
+    Description:
+      en: bEnableNonLoginPenalty
+      zh-cn: bEnableNonLoginPenalty
+    Default: "True"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bEnableFastTravel:
+    Type: String
+    Label:
+      en: Whether to enable express travel
+      zh-cn: 是否开启快速旅行
+    Description:
+      en: bEnableFastTravel
+      zh-cn: bEnableFastTravel
+    Default: "True"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bIsStartLocationSelectByMap:
+    Type: String
+    Label:
+      en: Whether to select the starting location based on the map
+      zh-cn: 是否根据地图选择起始位置
+    Description:
+      en: bIsStartLocationSelectByMap
+      zh-cn: bIsStartLocationSelectByMap，若为关闭,死亡后依旧可以选择其他出生点
+    Default: "True"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bExistPlayerAfterLogout:
+    Type: String
+    Label:
+      en: Whether the player logs out to stay in place
+      zh-cn: 玩家登出是否留在原地
+    Description:
+      en: bExistPlayerAfterLogout
+      zh-cn: bExistPlayerAfterLogout
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  bEnableDefenseOtherGuildPlayer:
+    Type: String
+    Label:
+      en: Whether to take damage from other guilds
+      zh-cn: 是否受到其他公会伤害
+    Description:
+      en: bEnableDefenseOtherGuildPlayer
+      zh-cn: bEnableDefenseOtherGuildPlayer
+    Default: "False"
+    AllowedValues:
+      - "False"
+      - "True"
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+  GuildPlayerMaxNum:
+    Type: Number
+    Label:
+      en: Max player of Guild
+      zh-cn: 公会最大玩家数
+    Description:
+      en: GuildPlayerMaxNum
+      zh-cn: GuildPlayerMaxNum
+    Default: 20
+  CoopPlayerMaxNum:
+    Type: Number
+    Label:
+      en: Max player of coop
+      zh-cn: 合作的最大玩家数
+    Description:
+      en: CoopPlayerMaxNum
+      zh-cn: CoopPlayerMaxNum
+    Default: 4
+  PalEggDefaultHatchingTime:
+    Type: Number
+    Label:
+      en: Time(h) to incubate massive egg
+      zh-cn: 巨大化蛋孵化所需时间（小时）
+    Description:
+      en: PalEggDefaultHatchingTime
+      zh-cn: PalEggDefaultHatchingTime
+    Default: "72.000000"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 0.000001
+      UseSlider: true
+    MinValue: 0
+    MaxValue: 240
+  WorkSpeedRate:
+    Type: Number
+    Label:
+      en: WorkSpeedRate
+      zh-cn: 工作效率
+    Description:
+      en: WorkSpeedRate
+      zh-cn: WorkSpeedRate
+    Default: "1"
+    AssociationPropertyMetadata:
+      StringMode: true
+      Step: 1
+      UseSlider: true
+    MinValue: 0
+    MaxValue: 240
+  ServerPassword:
+    Type: String
+    Label:
+      en: Server Password
+      zh-cn: 服务器密码
+    Description:
+      en: ServerPassword
+      zh-cn: ServerPassword
+    AllowedPattern: '^[A-Za-z0-9\ ]*$'
+    Default: ""
+  AdminPassword:
+    Type: String
+    Label:
+      en: Admin Password
+      zh-cn: 服务器管理员密码
+    Description:
+      en: The admin password and RCON must be set at the same time to take effect.
+      zh-cn: 管理员密码和启用RCON 同时设置才能生效
+    AllowedPattern: '^[A-Za-z0-9\ ]*$'
+    Default: ""
+  RCONEnabled:
+    Type: String
+    Label:
+      en: Enable RCON
+      zh-cn: 启用RCON
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        "True": 开启
+        "False": 关闭
+    Description:
+      en: The admin password and RCON must be set at the same time to take effect.
+      zh-cn: 管理员密码和启用RCON 同时设置才能生效
+    AllowedValues:
+      - "False"
+      - "True"
+    Default: "False"
+Conditions:
+  LinuxTypeOS:
+    Fn::Equals:
+      - linux
+      - Ref: OSType
+  WindowsTypeOS:
+    Fn::Equals:
+      - windows
+      - Ref: OSType
+Resources:
+  EcsVpc:
+    Type: ALIYUN::ECS::VPC
+    Properties:
+      CidrBlock: 192.168.0.0/16
+      VpcName:
+        Ref: ALIYUN::StackName
+  EcsVSwitch:
+    Type: ALIYUN::ECS::VSwitch
+    Properties:
+      ZoneId:
+        Ref: ZoneId
+      VpcId:
+        Ref: EcsVpc
+      CidrBlock: 192.168.1.0/24
+  EcsSecurityGroup:
+    Type: ALIYUN::ECS::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: EcsVpc
+      SecurityGroupIngress:
+        - PortRange: 8211/8211
+          Priority: 1
+          SourceCidrIp: 0.0.0.0/0
+          IpProtocol: udp
+        - PortRange: 25575/25575
+          Priority: 1
+          SourceCidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+        - PortRange: 3389/3389
+          Priority: 1
+          SourceCidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+        - PortRange: 22/22
+          Priority: 1
+          SourceCidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+  LinuxEcsInstanceGroup:
+    Type: ALIYUN::ECS::InstanceGroup
+    Condition: LinuxTypeOS
+    Properties:
+      WillReplace: false
+      ZoneId:
+        Ref: ZoneId
+      VpcId:
+        Ref: EcsVpc
+      VSwitchId:
+        Ref: EcsVSwitch
+      SecurityGroupId:
+        Ref: EcsSecurityGroup
+      ImageId: linux
+      IoOptimized: optimized
+      InstanceChargeType:
+        Ref: PayType
+      PeriodUnit:
+        Ref: PayPeriodUnit
+      Period:
+        Ref: PayPeriod
+      SystemDiskCategory:
+        Ref: SystemDiskCategory
+      SystemDiskSize:
+        Ref: SystemDiskSize
+      MaxAmount: 1
+      InstanceType:
+        Ref: EcsInstanceType
+      Password:
+        Ref: InstancePassword
+      InternetMaxBandwidthOut:
+        Ref: InternetMaxBandwidthOut
+      InternetChargeType:
+        Ref: InternetChargeType
+      InstanceName:
+        Fn::Join:
+          - '-'
+          - - Ref: ALIYUN::StackName
+            - '[1,4]'
+      UserData: |
+        #!/bin/bash
+        sudo chmod +x /root/clean.sh
+        sudo -u ecs-assist-user sed -i 's/-useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS//' /home/ecs-assist-user/.steam/SteamApps/common/PalServer/run.sh
+        echo "user data success"
+  WindowsEcsInstanceGroup:
+    Type: ALIYUN::ECS::InstanceGroup
+    Condition: WindowsTypeOS
+    Properties:
+      WillReplace: false
+      ZoneId:
+        Ref: ZoneId
+      VpcId:
+        Ref: EcsVpc
+      VSwitchId:
+        Ref: EcsVSwitch
+      SecurityGroupId:
+        Ref: EcsSecurityGroup
+      ImageId: windows
+      IoOptimized: optimized
+      InstanceChargeType:
+        Ref: PayType
+      PeriodUnit:
+        Ref: PayPeriodUnit
+      Period:
+        Ref: PayPeriod
+      SystemDiskCategory:
+        Ref: SystemDiskCategory
+      SystemDiskSize:
+        Ref: SystemDiskSize
+      MaxAmount: 1
+      InstanceType:
+        Ref: EcsInstanceType
+      Password:
+        Ref: InstancePassword
+      InternetMaxBandwidthOut:
+        Ref: InternetMaxBandwidthOut
+      InternetChargeType:
+        Ref: InternetChargeType
+      InstanceName:
+        Fn::Join:
+          - '-'
+          - - Ref: ALIYUN::StackName
+            - '[1,4]'
+      UserData: |
+        [powershell]
+  InstanceRunCommandForLinuxEcsAssistUser:
+    Type: ALIYUN::ECS::RunCommand
+    Condition: LinuxTypeOS
+    DependsOn:
+      - LinuxEcsInstanceGroup
+    Properties:
+      Type: RunShellScript
+      Sync: true
+      Timeout: 1800
+      Username: ecs-assist-user
+      InstanceIds:
+        Fn::GetAtt:
+          - LinuxEcsInstanceGroup
+          - InstanceIds
+      CommandContent:
+        Fn::Sub:
+          - |
+            #!/bin/bash
+            # 修改复制文件到目标目录
+            cd /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer
+            cp /home/ecs-assist-user/.steam/SteamApps/common/PalServer/DefaultPalWorldSettings.ini /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+            sed -i 's/Difficulty=[^,)]*/Difficulty=${Difficulty}/' PalWorldSettings.ini
+            sed -i 's/DayTimeSpeedRate=[^,)]*/DayTimeSpeedRate=${DayTimeSpeedRate}/' PalWorldSettings.ini
+            sed -i 's/NightTimeSpeedRate=[^,)]*/NightTimeSpeedRate=${NightTimeSpeedRate}/' PalWorldSettings.ini
+            sed -i 's/ExpRate=[^,)]*/ExpRate=${ExpRate}/' PalWorldSettings.ini
+            sed -i 's/PalCaptureRate=[^,)]*/PalCaptureRate=${PalCaptureRate}/' PalWorldSettings.ini
+            sed -i 's/PalSpawnNumRate=[^,)]*/PalSpawnNumRate=${PalSpawnNumRate}/' PalWorldSettings.ini
+            sed -i 's/PalDamageRateAttack=[^,)]*/PalDamageRateAttack=${PalDamageRateAttack}/' PalWorldSettings.ini
+            sed -i 's/PalDamageRateDefense=[^,)]*/PalDamageRateDefense=${PalDamageRateDefense}/' PalWorldSettings.ini
+            sed -i 's/PlayerDamageRateAttack=[^,)]*/PlayerDamageRateAttack=${PlayerDamageRateAttack}/' PalWorldSettings.ini
+            sed -i 's/PlayerDamageRateDefense=[^,)]*/PlayerDamageRateDefense=${PlayerDamageRateDefense}/' PalWorldSettings.ini
+            sed -i 's/PlayerStomachDecreaceRate=[^,)]*/PlayerStomachDecreaceRate=${PlayerStomachDecreaceRate}/' PalWorldSettings.ini
+            sed -i 's/PlayerStaminaDecreaceRate=[^,)]*/PlayerStaminaDecreaceRate=${PlayerStaminaDecreaceRate}/' PalWorldSettings.ini
+            sed -i 's/PlayerAutoHPRegeneRate=[^,)]*/PlayerAutoHPRegeneRate=${PlayerAutoHPRegeneRate}/' PalWorldSettings.ini
+            sed -i 's/PlayerAutoHpRegeneRateInSleep=[^,)]*/PlayerAutoHpRegeneRateInSleep=${PlayerAutoHpRegeneRateInSleep}/' PalWorldSettings.ini
+            sed -i 's/PalStomachDecreaceRate=[^,)]*/PalStomachDecreaceRate=${PalStomachDecreaceRate}/' PalWorldSettings.ini
+            sed -i 's/PalStaminaDecreaceRate=[^,)]*/PalStaminaDecreaceRate=${PalStaminaDecreaceRate}/' PalWorldSettings.ini
+            sed -i 's/PalAutoHPRegeneRate=[^,)]*/PalAutoHPRegeneRate=${PalAutoHPRegeneRate}/' PalWorldSettings.ini
+            sed -i 's/PalAutoHpRegeneRateInSleep=[^,)]*/PalAutoHpRegeneRateInSleep=${PalAutoHpRegeneRateInSleep}/' PalWorldSettings.ini
+            sed -i 's/BuildObjectDamageRate=[^,)]*/BuildObjectDamageRate=${BuildObjectDamageRate}/' PalWorldSettings.ini
+            sed -i 's/BuildObjectDeteriorationDamageRate=[^,)]*/BuildObjectDeteriorationDamageRate=${BuildObjectDeteriorationDamageRate}/' PalWorldSettings.ini
+            sed -i 's/CollectionDropRate=[^,)]*/CollectionDropRate=${CollectionDropRate}/' PalWorldSettings.ini
+            sed -i 's/CollectionObjectHpRate=[^,)]*/CollectionObjectHpRate=${CollectionObjectHpRate}/' PalWorldSettings.ini
+            sed -i 's/CollectionObjectRespawnSpeedRate=[^,)]*/CollectionObjectRespawnSpeedRate=${CollectionObjectRespawnSpeedRate}/' PalWorldSettings.ini
+            sed -i 's/EnemyDropItemRate=[^,)]*/EnemyDropItemRate=${EnemyDropItemRate}/' PalWorldSettings.ini
+            sed -i 's/DeathPenalty=[^,)]*/DeathPenalty=${DeathPenalty}/' PalWorldSettings.ini
+            sed -i 's/GuildPlayerMaxNum=[^,)]*/GuildPlayerMaxNum=${GuildPlayerMaxNum}/' PalWorldSettings.ini
+            sed -i 's/PalEggDefaultHatchingTime=[^,)]*/PalEggDefaultHatchingTime=${PalEggDefaultHatchingTime}/' PalWorldSettings.ini
+            sed -i 's/ServerPlayerMaxNum=[^,)]*/ServerPlayerMaxNum=${ServerPlayerMaxNum}/' PalWorldSettings.ini
+            sed -i 's/ServerName=[^,)]*/ServerName=\"${ServerName}\"/' PalWorldSettings.ini
+            sed -i 's/ServerDescription=[^,)]*/ServerDescription=\"${ServerDescription}\"/' PalWorldSettings.ini
+            sed -i 's/ServerPassword=[^,)]*/ServerPassword=\"${ServerPassword}\"/' PalWorldSettings.ini
+            sed -i 's/AdminPassword=[^,)]*/AdminPassword=\"${AdminPassword}\"/' PalWorldSettings.ini
+            sed -i 's/RCONEnabled=[^,)]*/RCONEnabled=${RCONEnabled}/' PalWorldSettings.ini
+            sed -i 's/bEnablePlayerToPlayerDamage=[^,)]*/bEnablePlayerToPlayerDamage=${bEnablePlayerToPlayerDamage}/' PalWorldSettings.ini
+            sed -i 's/bEnableFriendlyFire=[^,)]*/bEnableFriendlyFire=${bEnableFriendlyFire}/' PalWorldSettings.ini
+            sed -i 's/bEnableInvaderEnemy=[^,)]*/bEnableInvaderEnemy=${bEnableInvaderEnemy}/' PalWorldSettings.ini
+            sed -i 's/bActiveUNKO=[^,)]*/bActiveUNKO=${bActiveUNKO}/' PalWorldSettings.ini
+            sed -i 's/bEnableAimAssistPad=[^,)]*/bEnableAimAssistPad=${bEnableAimAssistPad}/' PalWorldSettings.ini
+            sed -i 's/bEnableAimAssistKeyboard=[^,)]*/bEnableAimAssistKeyboard=${bEnableAimAssistKeyboard}/' PalWorldSettings.ini
+            sed -i 's/DropItemMaxNum=[^,)]*/DropItemMaxNum=${DropItemMaxNum}/' PalWorldSettings.ini
+            sed -i 's/DropItemMaxNum_UNKO=[^,)]*/DropItemMaxNum_UNKO=${DropItemMaxNum_UNKO}/' PalWorldSettings.ini
+            sed -i 's/BaseCampMaxNum=[^,)]*/BaseCampMaxNum=${BaseCampMaxNum}/' PalWorldSettings.ini
+            sed -i 's/BaseCampWorkerMaxNum=[^,)]*/BaseCampWorkerMaxNum=${BaseCampWorkerMaxNum}/' PalWorldSettings.ini
+            sed -i 's/DropItemAliveMaxHours=[^,)]*/DropItemAliveMaxHours=${DropItemAliveMaxHours}/' PalWorldSettings.ini
+            sed -i 's/bAutoResetGuildNoOnlinePlayers=[^,)]*/bAutoResetGuildNoOnlinePlayers=${bAutoResetGuildNoOnlinePlayers}/' PalWorldSettings.ini
+            sed -i 's/AutoResetGuildTimeNoOnlinePlayers=[^,)]*/AutoResetGuildTimeNoOnlinePlayers=${AutoResetGuildTimeNoOnlinePlayers}/' PalWorldSettings.ini
+            sed -i 's/bIsMultiplay=[^,)]*/bIsMultiplay=${bIsMultiplay}/' PalWorldSettings.ini
+            sed -i 's/bIsPvP=[^,)]*/bIsPvP=${bIsPvP}/' PalWorldSettings.ini
+            sed -i 's/bCanPickupOtherGuildDeathPenaltyDrop=[^,)]*/bCanPickupOtherGuildDeathPenaltyDrop=${bCanPickupOtherGuildDeathPenaltyDrop}/' PalWorldSettings.ini
+            sed -i 's/bEnableNonLoginPenalty=[^,)]*/bEnableNonLoginPenalty=${bEnableNonLoginPenalty}/' PalWorldSettings.ini
+            sed -i 's/bEnableFastTravel=[^,)]*/bEnableFastTravel=${bEnableFastTravel}/' PalWorldSettings.ini
+            sed -i 's/bIsStartLocationSelectByMap=[^,)]*/bIsStartLocationSelectByMap=${bIsStartLocationSelectByMap}/' PalWorldSettings.ini
+            sed -i 's/bExistPlayerAfterLogout=[^,)]*/bExistPlayerAfterLogout=${bExistPlayerAfterLogout}/' PalWorldSettings.ini
+            sed -i 's/bEnableDefenseOtherGuildPlayer=[^,)]*/bEnableDefenseOtherGuildPlayer=${bEnableDefenseOtherGuildPlayer}/' PalWorldSettings.ini
+            sed -i 's/CoopPlayerMaxNum=[^,)]*/CoopPlayerMaxNum=${CoopPlayerMaxNum}/' PalWorldSettings.ini
+            sed -i 's/WorkSpeedRate=[^,)]*/WorkSpeedRate=${WorkSpeedRate}/' PalWorldSettings.ini
+
+            sudo systemctl stop pal-server
+            /usr/games/steamcmd +login anonymous +app_update 2394010 validate +quit
+            sudo systemctl start pal-server
+          - ServerName:
+              Ref: ServerName
+  InstanceRunCommandForWindows:
+    Type: ALIYUN::ECS::RunCommand
+    Condition: WindowsTypeOS
+    DependsOn:
+      - WindowsEcsInstanceGroup
+    Properties:
+      Type: RunPowerShellScript
+      Sync: true
+      InstanceIds:
+        Fn::GetAtt:
+          - WindowsEcsInstanceGroup
+          - InstanceIds
+      Timeout: 1800
+      CommandContent:
+        Fn::Sub:
+          - |
+            $TaskName = "PalServerAutoStart"
+            $ProcessName = "PalServer-Win64-Test-Cmd"
+
+            if (Get-Process -Name $ProcessName -ErrorAction SilentlyContinue) {
+            Stop-Process -Name $ProcessName -Force
+            Start-Sleep -Seconds 1
+            }
+            Start-Process "C:\Program Files\PalServer\steam\steamcmd.exe" -ArgumentList "+login anonymous +app_update 2394010 validate +quit" -Wait
+
+            $sourcePath = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\DefaultPalWorldSettings.ini"
+            $destPath = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer\PalWorldSettings.ini"
+            Copy-Item -Path $sourcePath -Destination $destPath -Force
+            
+            Set-Location "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer"
+            # Creating a list of settings to replace
+            $settingsToReplace = @{
+              "Difficulty" = "${Difficulty}"
+              "DayTimeSpeedRate" = "${DayTimeSpeedRate}"
+              "NightTimeSpeedRate" = "${NightTimeSpeedRate}"
+              "ExpRate" = "${ExpRate}"
+              "PalCaptureRate" = "${PalCaptureRate}"
+              "PalSpawnNumRate" = "${PalSpawnNumRate}"
+              "PalDamageRateAttack" = "${PalDamageRateAttack}"
+              "PalDamageRateDefense" = "${PalDamageRateDefense}"
+              "PlayerDamageRateAttack" = "${PlayerDamageRateAttack}"
+              "PlayerDamageRateDefense" = "${PlayerDamageRateDefense}"
+              "PlayerStomachDecreaceRate" = "${PlayerStomachDecreaceRate}"
+              "PlayerStaminaDecreaceRate" = "${PlayerStaminaDecreaceRate}"
+              "PlayerAutoHPRegeneRate" = "${PlayerAutoHPRegeneRate}"
+              "PlayerAutoHpRegeneRateInSleep" = "${PlayerAutoHpRegeneRateInSleep}"
+              "PalStomachDecreaceRate" = "${PalStomachDecreaceRate}"
+              "PalStaminaDecreaceRate" = "${PalStaminaDecreaceRate}"
+              "PalAutoHPRegeneRate" = "${PalAutoHPRegeneRate}"
+              "PalAutoHpRegeneRateInSleep" = "${PalAutoHpRegeneRateInSleep}"
+              "BuildObjectDamageRate" = "${BuildObjectDamageRate}"
+              "BuildObjectDeteriorationDamageRate" = "${BuildObjectDeteriorationDamageRate}"
+              "CollectionDropRate" = "${CollectionDropRate}"
+              "CollectionObjectHpRate" = "${CollectionObjectHpRate}"
+              "CollectionObjectRespawnSpeedRate" = "${CollectionObjectRespawnSpeedRate}"
+              "EnemyDropItemRate" = "${EnemyDropItemRate}"
+              "DeathPenalty" = "${DeathPenalty}"
+              "GuildPlayerMaxNum" = "${GuildPlayerMaxNum}"
+              "PalEggDefaultHatchingTime" = "${PalEggDefaultHatchingTime}"
+              "ServerPlayerMaxNum" = "${ServerPlayerMaxNum}"
+              "ServerName" = "`"${ServerName}`""
+              "ServerDescription" = "`"${ServerDescription}`""
+              "ServerPassword" = "`"${ServerPassword}`""
+              "AdminPassword" = "`"${AdminPassword}`""
+              "RCONEnabled" = "${RCONEnabled}"
+              "bEnablePlayerToPlayerDamage" = "${bEnablePlayerToPlayerDamage}"
+              "bEnableFriendlyFire" = "${bEnableFriendlyFire}"
+              "bEnableInvaderEnemy" = "${bEnableInvaderEnemy}"
+              "bActiveUNKO" = "${bActiveUNKO}"
+              "bEnableAimAssistPad" = "${bEnableAimAssistPad}"
+              "bEnableAimAssistKeyboard" = "${bEnableAimAssistKeyboard}"
+              "DropItemMaxNum" = "${DropItemMaxNum}"
+              "DropItemMaxNum_UNKO" = "${DropItemMaxNum_UNKO}"
+              "BaseCampMaxNum" = "${BaseCampMaxNum}"
+              "BaseCampWorkerMaxNum" = "${BaseCampWorkerMaxNum}"
+              "DropItemAliveMaxHours" = "${DropItemAliveMaxHours}"
+              "bAutoResetGuildNoOnlinePlayers" = "${bAutoResetGuildNoOnlinePlayers}"
+              "AutoResetGuildTimeNoOnlinePlayers" = "${AutoResetGuildTimeNoOnlinePlayers}"
+              "bIsMultiplay" = "${bIsMultiplay}"
+              "bIsPvP" = "${bIsPvP}"
+              "bCanPickupOtherGuildDeathPenaltyDrop" = "${bCanPickupOtherGuildDeathPenaltyDrop}"
+              "bEnableNonLoginPenalty" = "${bEnableNonLoginPenalty}"
+              "bEnableFastTravel" = "${bEnableFastTravel}"
+              "bIsStartLocationSelectByMap" = "${bIsStartLocationSelectByMap}"
+              "bExistPlayerAfterLogout" = "${bExistPlayerAfterLogout}"
+              "bEnableDefenseOtherGuildPlayer" = "${bEnableDefenseOtherGuildPlayer}"
+              "CoopPlayerMaxNum" = "${CoopPlayerMaxNum}"
+              "WorkSpeedRate" = "${WorkSpeedRate}"
+            }
+
+            $fileContent = Get-Content -Path $destPath -Raw
+
+            foreach ($key in $settingsToReplace.Keys) {
+              $value = $settingsToReplace[$key]
+              $pattern = "$key=[^,)]*"
+              $fileContent = $fileContent -replace $pattern, "$key=$value"
+            }
+
+            Set-Content -Path $destPath -Value $fileContent
+
+            $TaskName = "PalServerAutoStart"
+            Start-ScheduledTask -TaskName $TaskName
+          - ServerName:
+              Ref: ServerName
+Outputs:
+  linuxEndpoint:
+    Condition: LinuxTypeOS
+    Label:
+      zh-cn: 幻兽帕鲁服务器地址端口
+      en: Service Addresses
+    Value:
+      Fn::Sub:
+        - ${ServerAddress}:8211
+        - ServerAddress:
+            Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                  - LinuxEcsInstanceGroup
+                  - PublicIps
+  windowsEndpoint:
+    Condition: WindowsTypeOS
+    Label:
+      zh-cn: 幻兽帕鲁服务器地址端口
+      en: Service Addresses
+    Value:
+      Fn::Sub:
+        - ${ServerAddress}:8211
+        - ServerAddress:
+            Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                  - WindowsEcsInstanceGroup
+                  - PublicIps
+  document:
+    Label:
+      zh-cn: 操作说明
+      en: operation detail
+    Value: 登录您的Steam账号后打开幻兽帕鲁游戏并点击开始，输入该服务器地址和端口即可畅快开玩～
+Metadata:
+  ALIYUN::ROS::Interface:
+    Hidden:
+      - Difficulty
+    ParameterGroups:
+      - Parameters:
+          - PayType
+          - PayPeriodUnit
+          - PayPeriod
+        Label:
+          default:
+            en: PayType Configuration
+            zh-cn: 付费类型配置
+      - Parameters:
+          - EcsInstanceType
+          - InternetChargeType
+          - InternetMaxBandwidthOut
+          - SystemDiskCategory
+          - SystemDiskSize
+          - OSType
+          - InstancePassword
+        Label:
+          default:
+            zh-cn: ECS实例配置
+            en: ECS Instance Configuration
+      - Parameters:
+          - ZoneId
+        Label:
+          default:
+            zh-cn: 可用区配置
+            en: Zone Configuration
+      - Parameters:
+          - ServerName
+          - ServerDescription
+          - ServerPassword
+          - AdminPassword
+          - RCONEnabled
+          - ServerPlayerMaxNum
+          - GuildPlayerMaxNum
+          - Difficulty
+          - DeathPenalty
+          - DayTimeSpeedRate
+          - NightTimeSpeedRate
+          - ExpRate
+          - PalCaptureRate
+          - PalSpawnNumRate
+          - PalDamageRateAttack
+          - PalDamageRateDefense
+          - PlayerDamageRateAttack
+          - PlayerDamageRateDefense
+          - PlayerStomachDecreaceRate
+          - PlayerStaminaDecreaceRate
+          - PlayerAutoHPRegeneRate
+          - PlayerAutoHpRegeneRateInSleep
+          - PalStomachDecreaceRate
+          - PalStaminaDecreaceRate
+          - PalAutoHPRegeneRate
+          - PalAutoHpRegeneRateInSleep
+          - BuildObjectDamageRate
+          - BuildObjectDeteriorationDamageRate
+          - CollectionDropRate
+          - CollectionObjectHpRate
+          - CollectionObjectRespawnSpeedRate
+          - EnemyDropItemRate
+          - PalEggDefaultHatchingTime
+          - bAutoResetGuildNoOnlinePlayers
+          - AutoResetGuildTimeNoOnlinePlayers
+          - WorkSpeedRate
+          - DropItemMaxNum
+          - DropItemMaxNum_UNKO
+          - BaseCampMaxNum
+          - BaseCampWorkerMaxNum
+          - DropItemAliveMaxHours
+          - CoopPlayerMaxNum
+          - bEnablePlayerToPlayerDamage
+          - bEnableFriendlyFire
+          - bEnableInvaderEnemy
+          - bActiveUNKO
+          - bEnableAimAssistPad
+          - bEnableAimAssistKeyboard
+          - bIsMultiplay
+          - bIsPvP
+          - bCanPickupOtherGuildDeathPenaltyDrop
+          - bEnableNonLoginPenalty
+          - bEnableFastTravel
+          - bIsStartLocationSelectByMap
+          - bExistPlayerAfterLogout
+          - bEnableDefenseOtherGuildPlayer
+        Label:
+          default:
+            zh-cn: 游戏参数配置
+            en: Server Configuration
+        DefaultExpand: false
+    EstimateCostBlockedList:
+      - InstancePassword
+      - ServerName
+      - ServerDescription
+      - ServerPassword
+      - AdminPassword
+      - RCONEnabled
+      - ServerPlayerMaxNum
+      - GuildPlayerMaxNum
+      - Difficulty
+      - DeathPenalty
+      - DayTimeSpeedRate
+      - NightTimeSpeedRate
+      - ExpRate
+      - PalCaptureRate
+      - PalSpawnNumRate
+      - PalDamageRateAttack
+      - PalDamageRateDefense
+      - PlayerDamageRateAttack
+      - PlayerDamageRateDefense
+      - PlayerStomachDecreaceRate
+      - PlayerStaminaDecreaceRate
+      - PlayerAutoHPRegeneRate
+      - PlayerAutoHpRegeneRateInSleep
+      - PalStomachDecreaceRate
+      - PalStaminaDecreaceRate
+      - PalAutoHPRegeneRate
+      - PalAutoHpRegeneRateInSleep
+      - BuildObjectDamageRate
+      - BuildObjectDeteriorationDamageRate
+      - CollectionDropRate
+      - CollectionObjectHpRate
+      - CollectionObjectRespawnSpeedRate
+      - EnemyDropItemRate
+      - PalEggDefaultHatchingTime
+      - bAutoResetGuildNoOnlinePlayers
+      - AutoResetGuildTimeNoOnlinePlayers
+      - WorkSpeedRate
+      - DropItemMaxNum
+      - DropItemMaxNum_UNKO
+      - BaseCampMaxNum
+      - BaseCampWorkerMaxNum
+      - DropItemAliveMaxHours
+      - CoopPlayerMaxNum
+      - bEnablePlayerToPlayerDamage
+      - bEnableFriendlyFire
+      - bEnableInvaderEnemy
+      - bActiveUNKO
+      - bEnableAimAssistPad
+      - bEnableAimAssistKeyboard
+      - bIsMultiplay
+      - bIsPvP
+      - bCanPickupOtherGuildDeathPenaltyDrop
+      - bEnableNonLoginPenalty
+      - bEnableFastTravel
+      - bIsStartLocationSelectByMap
+      - bExistPlayerAfterLogout
+      - bEnableDefenseOtherGuildPlayer

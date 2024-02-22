@@ -1,0 +1,125 @@
+FormatVersion: OOS-2019-06-01
+Description:
+  en: Restart pal-server
+  zh-cn: Restart pal-server
+  name-en: RestartPal-server
+  name-zh-cn: 重启服务
+Parameters:
+  regionId:
+    Type: String
+    Label:
+      en: RegionId
+      zh-cn: 地域ID
+    AssociationProperty: RegionId
+    Default: '{{ ACS::RegionId }}'
+  targets:
+    Label:
+      en: TargetInstance
+      zh-cn: 目标实例
+    Type: Json
+    AssociationProperty: Targets
+    AssociationPropertyMetadata:
+      ResourceType: 'ALIYUN::ECS::Instance'
+      RegionId: regionId
+  switch:
+    Label:
+      en: Switch
+      zh-cn: 开关
+    Type: String
+    Default: 'close'
+    AllowedValues:
+      - close
+      - open
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        open: 开启
+        close: 关闭
+Tasks:
+  - Name: getInstance
+    Description:
+      en: Views the ECS instances
+      zh-cn: 获取ECS实例
+    Action: 'ACS::SelectTargets'
+    Properties:
+      ResourceType: 'ALIYUN::ECS::Instance'
+      RegionId: '{{ regionId }}'
+      Filters:
+        - '{{ targets }}'
+    Outputs:
+      instanceIds:
+        Type: List
+        ValueSelector: 'Instances.Instance[].InstanceId'
+  - Name: queryInstanceOSType
+    Action: 'ACS::ExecuteApi'
+    Description:
+      en: Queries ECS instance OS type
+      zh-cn: 获取ECS实例操作系统类型
+    Properties:
+      Service: ECS
+      API: DescribeInstances
+      Parameters:
+        RegionId: '{{ regionId }}'
+        InstanceIds:
+          - Fn::Select:
+            - 0
+            - '{{ getInstance.instanceIds }}'
+    Outputs:
+      OSType:
+        Type: String
+        ValueSelector: 'Instances.Instance[].OSType'
+  - Name: RunCommandForLinux
+    When:
+      'Fn::Equals':
+        - '{{ queryInstanceOSType.OSType }}'
+        - linux
+    Action: ACS::ECS::RunCommand
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 下载文件到实例并执行命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ ACS::TaskLoopItem }}'
+      commandType: RunShellScript
+      username: ecs-assist-user
+      workingDir: /home/ecs-assist-user
+      commandContent: |-
+        #!/bin/bash
+        if [ '{{ switch }}' == 'close' ]; then
+          sudo swapoff -a
+          echo 'swapoff'
+        elif [ '{{ switch }}' == 'open' ]; then
+          sudo /bin/bash /root/virtual_mem.sh
+          chmod -x /root/clean.sh
+          sudo swapon -a
+          echo 'swapon'
+        fi
+        sudo systemctl restart pal-server
+    Loop:
+      Items: '{{ getInstance.instanceIds }}'
+  - Name: RunCommandForWindows
+    When:
+      'Fn::Equals':
+        - '{{ queryInstanceOSType.OSType }}'
+        - windows
+    Action: ACS::ECS::RunCommand
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 下载文件到实例并执行命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ ACS::TaskLoopItem }}'
+      commandType: RunPowerShellScript
+      commandContent: |-
+        Write-Host "Not Support Now."
+    Loop:
+      Items: '{{ getInstance.instanceIds }}'
+Metadata:
+  ALIYUN::OOS::Interface:
+    ParameterGroups:
+      - Parameters:
+          - regionId
+          - targets
+        Label:
+          default:
+            zh-cn: 选择实例
+            en: Select Instances

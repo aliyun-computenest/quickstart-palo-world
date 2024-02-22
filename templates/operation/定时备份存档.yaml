@@ -1,0 +1,228 @@
+{
+  "FormatVersion": "OOS-2019-06-01",
+  "Description": {
+    "en": "Auto backup archive。This task starts after the task is started, and back up archive files at a set frequency. The task only needs to be executed once. If you need to re-select the scheduled restart time, please go to <a href=\"https://oos.console.aliyun.com/\">The OOS Console</a> to cancel the task and then recreate it.",
+    "zh-cn": "定时备份存档。该任务启动后，在设定的频率内备份存档。注意：该任务只需执行一次，若需要重新选择定时备份的频率，请去<a href=\"https://oos.console.aliyuncom/\">OOS控制台</a>取消该任务再重新创建。",
+    "name-en": "Restart pal-server",
+    "name-zh-cn": "定时备份存档"
+  },
+  "Parameters": {
+    "OOSAssumeRole": {
+      "Label": {
+        "en": "OOSAssumeRole",
+        "zh-cn": "OOS扮演的RAM角色"
+      },
+      "Type": "String",
+      "Default": "OOSServiceRole"
+    },
+    "regionId": {
+      "Type": "String",
+      "Label": {
+        "en": "RegionId",
+        "zh-cn": "地域ID"
+      },
+      "AssociationProperty": "RegionId",
+      "Default": "{{ ACS::RegionId }}"
+    },
+    "targets": {
+      "Label": {
+        "en": "TargetInstance",
+        "zh-cn": "目标实例"
+      },
+      "Type": "Json",
+      "AssociationProperty": "Targets",
+      "AssociationPropertyMetadata": {
+        "ResourceType": "ALIYUN::ECS::Instance",
+        "RegionId": "regionId",
+        "AcceptFileSuffixes": ".zip"
+      }
+    },
+    "scheduledIntervalHour": {
+      "Label": {
+        "en": "Interval hours for scheduled backups",
+        "zh-cn": "定时备份的频率, 每隔几小时备份一次存档"
+      },
+      "Description": {
+        "en": "Please refer to the documentation：https://developer.aliyun.com/article/1432585",
+        "zh-cn": "具体备份路径参考文档：https://developer.aliyun.com/article/1432585"
+      },
+      "Type": "String",
+      "AllowedValues": [
+        "2",
+        "5"
+      ],
+      "Default": "2"
+    },
+    "triggerEndDate": {
+      "Label": {
+        "en": "TriggerEndDate",
+        "zh-cn": "时间触发器结束时间"
+      },
+      "Description": {
+        "en": "Format: yyyy-MM-ddTHH:mm:ssZ.",
+        "zh-cn": "格式：yyyy-MM-ddTHH:mm:ssZ"
+      },
+      "Type": "String",
+      "AssociationProperty": "DateTime",
+      "AssociationPropertyMetadata": {
+        "Format": "YYYY-MM-DDTHH:mm:ssZ"
+      },
+      "Default": "2024-12-31T00:00:00Z"
+    }
+  },
+  "Tasks": [
+    {
+      "Name": "timerTrigger",
+      "Action": "ACS::TimerTrigger",
+      "Description": {
+        "en": "Triggers a task as scheduled by specifying Cron expression",
+        "zh-cn": "通过指定Cron表达式按计划触发任务"
+      },
+      "Properties": {
+        "Type": "cron",
+        "EndDate": "{{ triggerEndDate }}",
+        "TimeZone": "Asia/Shanghai",
+        "Expression": "0 0 */{{ scheduledIntervalHour }} * * *"
+      }
+    },
+    {
+      "Name": "getInstance",
+      "Description": {
+        "en": "Views the ECS instances",
+        "zh-cn": "获取ECS实例"
+      },
+      "Action": "ACS::SelectTargets",
+      "Properties": {
+        "ResourceType": "ALIYUN::ECS::Instance",
+        "RegionId": "{{ regionId }}",
+        "Filters": [
+          "{{ targets }}"
+        ]
+      },
+      "Outputs": {
+        "instanceIds": {
+          "Type": "List",
+          "ValueSelector": "Instances.Instance[].InstanceId"
+        }
+      }
+    },
+    {
+      "Name": "queryInstanceOSType",
+      "Action": "ACS::ExecuteApi",
+      "Description": {
+        "en": "Queries ECS instance OS type",
+        "zh-cn": "获取ECS实例操作系统类型"
+      },
+      "Properties": {
+        "Service": "ECS",
+        "API": "DescribeInstances",
+        "Parameters": {
+          "RegionId": "{{ regionId }}",
+          "InstanceIds": [
+            {
+              "Fn::Select": [
+                0,
+                "{{ getInstance.instanceIds }}"
+              ]
+            }
+          ]
+        }
+      },
+      "Outputs": {
+        "OSType": {
+          "Type": "String",
+          "ValueSelector": "Instances.Instance[].OSType"
+        }
+      }
+    },
+    {
+      "Name": "RunCommandForLinux",
+      "When": {
+        "Fn::Equals": [
+          "{{ queryInstanceOSType.OSType }}",
+          "linux"
+        ]
+      },
+      "Action": "ACS::ECS::RunCommand",
+      "Description": {
+        "en": "Downloads file to the ECS instances adn run command",
+        "zh-cn": "下载文件到实例并执行命令"
+      },
+      "Properties": {
+        "regionId": "{{ regionId }}",
+        "instanceId": "{{ ACS::TaskLoopItem }}",
+        "commandType": "RunShellScript",
+        "username": "ecs-assist-user",
+        "workingDir": "/home/ecs-assist-user",
+        "commandContent": "#!/bin/bash\n\n# 定义源文件夹和目标文件夹的基本路径\nSOURCE=\"/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved\"\nBACKUP_BASE=\"/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved_Backup\"\n\nif [ ! -d \"${BACKUP_BASE}\" ]; then\nmkdir -p \"${BACKUP_BASE}\"\nfi\n\n# 创建一个时间戳\nTIMESTAMP=$(date +\"%Y%m%d%H%M\")\n# 定义一个新的备份目录名称，包含时间戳\nNEW_BACKUP_DIR=\"${BACKUP_BASE}/Saved-${TIMESTAMP}\"\n\n# 使用 rsync 进行备份\nrsync -av --delete \"$SOURCE/\" \"$NEW_BACKUP_DIR\"\n\n# 删除超出5次备份的旧目录\nls -dt -r ${BACKUP_BASE}/Saved-* | tail -n +6 | xargs -r rm -rf"
+      },
+      "Loop": {
+        "Items": "{{ getInstance.instanceIds }}"
+      }
+    },
+    {
+      "Name": "RunCommandForWindows",
+      "When": {
+        "Fn::Equals": [
+          "{{ queryInstanceOSType.OSType }}",
+          "windows"
+        ]
+      },
+      "Action": "ACS::ECS::RunCommand",
+      "Description": {
+        "en": "Downloads file to the ECS instances adn run command",
+        "zh-cn": "下载文件到实例并执行命令"
+      },
+      "Properties": {
+        "regionId": "{{ regionId }}",
+        "instanceId": "{{ ACS::TaskLoopItem }}",
+        "commandType": "RunPowerShellScript",
+        "commandContent": "# 设置源目录和目标目录\n$sourceDir = \"C:\\Program Files\\PalServer\\steam\\steamapps\\common\\PalServer\\Pal\\Saved\"\n$destinationDir = \"C:\\Program Files\\PalServer\\steam\\steamapps\\common\\PalServer\\Pal\\Saved_Backup\"\n\nif (-not (Test-Path -Path $destinationDir)) {\n    New-Item -Path $destinationDir -ItemType Directory\n}\n\n# 创建带有时间戳的目标备份目录\n$timestamp = Get-Date -Format \"yyyyMMddHHmm\"\n$backupDir = Join-Path $destinationDir (\"Saved-\" + $timestamp)\n\n# 拷贝文件\nCopy-Item -Path $sourceDir -Destination $backupDir -Recurse -Force\n\n# 获取所有备份目录\n$allBackups = Get-ChildItem -Path $destinationDir -Directory | Where-Object { $_.Name -like \"Saved-*\" }\n\n# 按时间排序，并保留最新的5个备份\n$oldBackups = $allBackups | Sort-Object CreationTime -Descending | Select-Object -Skip 5\n\n# 删除旧的备份\nforeach ($backup in $oldBackups) {\n    Remove-Item -Path $backup.FullName -Recurse -Force\n}"
+      },
+      "Loop": {
+        "Items": "{{ getInstance.instanceIds }}"
+      }
+    }
+  ],
+  "RamRole": "{{ OOSAssumeRole }}",
+  "Metadata": {
+    "ALIYUN::OOS::Interface": {
+      "ParameterGroups": [
+        {
+          "Parameters": [
+            "regionId",
+            "targets"
+          ],
+          "Label": {
+            "default": {
+              "zh-cn": "选择实例",
+              "en": "Select Instances"
+            }
+          }
+        },
+        {
+          "Parameters": [
+            "scheduledIntervalHour",
+            "triggerEndDate"
+          ],
+          "Label": {
+            "default": {
+              "zh-cn": "定时备份存档",
+              "en": "Scheduled Backup"
+            }
+          }
+        },
+        {
+          "Parameters": [
+            "OOSAssumeRole"
+          ],
+          "Label": {
+            "default": {
+              "zh-cn": "ram角色"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

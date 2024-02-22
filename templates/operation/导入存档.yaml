@@ -1,0 +1,268 @@
+FormatVersion: OOS-2019-06-01
+Description:
+  en: Replace the saved games
+  zh-cn: 替换存档文件，需要本地上传存档压缩包（.zip)，请将Pal/Saved目录打包成zip包上传，需要注意目前不支持跨操作系统导入存档，例如linux系统存档导入到windows是不支持的。目前只支持Linux系统存档到Linux存档的替换，以及Windows存档到Windows存档的替换。Windows系统的存档迁移到Linux系统请参见下面链接中的存档部分：<a href="https://developer.aliyun.com/article/1429548">https://developer.aliyun.com/article/1429548</a>
+  name-en: ReplaceSavedGames
+  name-zh-cn: 替换存档
+Parameters:
+  regionId:
+    Type: String
+    Label:
+      en: RegionId
+      zh-cn: 地域ID
+    AssociationProperty: RegionId
+    Default: '{{ ACS::RegionId }}'
+  targets:
+    Label:
+      en: TargetInstance
+      zh-cn: 目标实例
+    Type: Json
+    AssociationProperty: Targets
+    AssociationPropertyMetadata:
+      ResourceType: ALIYUN::ECS::Instance
+      RegionId: regionId
+      AcceptFileSuffixes: .zip
+  sourcePath:
+    Type: String
+    Label:
+      en: SourcePath
+      zh-cn: 选择文件。
+    Description: 选择文件。替换存档文件，需要本地上传存档压缩包（.zip)，请将Pal/Saved目录打包成zip包上传，需要注意目前不支持跨操作系统导入存档，例如linux系统存档导入到windows是不支持的。目前只支持Linux系统存档到Linux存档的替换，以及Windows存档到Windows存档的替换。Windows系统的存档迁移到Linux系统请参见下面链接中的存档部分：<a href="https://developer.aliyun.com/article/1429548">https://developer.aliyun.com/article/1429548</a>
+    AssociationProperty: ALIYUN::OOS::File::FileUrl
+    AssociationPropertyMetadata:
+      FileType: local
+      RegionId: ${regionId}
+      AcceptFileSuffixes: .zip
+Tasks:
+  - Name: getInstance
+    Description:
+      en: Views the ECS instances
+      zh-cn: 获取ECS实例
+    Action: ACS::SelectTargets
+    Properties:
+      ResourceType: ALIYUN::ECS::Instance
+      RegionId: '{{ regionId }}'
+      Filters:
+        - '{{ targets }}'
+    Outputs:
+      instanceIds:
+        Type: List
+        ValueSelector: Instances.Instance[].InstanceId
+  - Name: queryInstanceOSType
+    Action: ACS::ExecuteApi
+    Description:
+      en: Queries ECS instance OS type
+      zh-cn: 获取ECS实例操作系统类型
+    Properties:
+      Service: ECS
+      API: DescribeInstances
+      Parameters:
+        RegionId: '{{ regionId }}'
+        InstanceIds:
+          - Fn::Select:
+              - 0
+              - '{{ getInstance.instanceIds }}'
+    Outputs:
+      OSType:
+        Type: String
+        ValueSelector: Instances.Instance[].OSType
+  - Name: RunCommandForLinux
+    When:
+      Fn::Equals:
+        - '{{ queryInstanceOSType.OSType }}'
+        - linux
+    Action: ACS::ECS::RunCommand
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 下载文件到实例并执行命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ ACS::TaskLoopItem }}'
+      commandType: RunShellScript
+      username: ecs-assist-user
+      workingDir: /home/ecs-assist-user
+      commandContent: |-
+        #!/bin/bash
+
+        # 安装 unzip 工具，以便能够解压 zip 文件
+        sudo apt install unzip -y
+        sudo apt install zip -y
+        # 定义存档路径和备份路径
+        destinationDir="/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved"
+        desParentDir="/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal"
+        backupDir="/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved_Backup"
+
+        # 生成备份文件的名称，包含日期以便于区分不同的备份
+        timestamp=$(date +"%Y%m%d%H%M%S")
+        backupFileName="Saved_Backup_${timestamp}.zip"
+
+        # 创建备份目录，如果不存在的话
+        mkdir -p "$backupDir"
+
+        # 打包指定目录到ZIP文件
+        zip -r "$backupDir/$backupFileName" "$destinationDir"
+        # 输出备份完成的信息
+        echo "Backup completed: $backupDir/$backupFileName"
+
+        # 停止 pal-server 服务以准备更新存档
+        sudo systemctl stop pal-server
+
+        sourcePath="{{sourcePath}}"
+        localZipPath="/home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/LinuxSaved.zip"
+
+        # 下载ZIP文件
+        wget -O "$localZipPath" "$sourcePath"
+        echo "Downloading save sourcePath: $sourcePath"
+        # 确保目标路径存在
+        if [ -d "$destinationDir" ]; then
+            # 删除现有的Saved目录
+            rm -rf "$destinationDir"
+        fi
+
+        # 创建目标目录，如果不存在的话
+        mkdir -p "$destinationDir"
+
+        # 创建一个临时目录来先解压ZIP文件
+        tempDir=$(mktemp -d)
+
+        # 解压ZIP文件到临时目录
+        unzip -q "$localZipPath" -d "$tempDir"
+
+        # 检查是否有且只有一个顶级目录
+        topLevelDirCount=$(find "$tempDir" -mindepth 1 -maxdepth 1 -type d | grep -v "__MACOSX" | wc -l)
+        topLevelDirPath=$(find "$tempDir" -mindepth 1 -maxdepth 1 -type d | grep -v "__MACOSX")
+
+        if [ "$topLevelDirCount" -eq 1 ]; then
+            # 只有一个顶级目录，移动其内容到目标目录
+            mv -n "$topLevelDirPath"/* "$destinationDir"
+        else
+            # 多个文件或目录，或没有顶级目录，直接移动所有内容到目标目录
+            mv -n "$tempDir"/* "$destinationDir"
+        fi
+
+        # 删除临时目录
+        rm -rf "$tempDir"
+
+        echo "Files have been extracted to $destinationDir"
+
+        # 删除下载的ZIP文件，清理工作目录
+        rm -f "$localZipPath"
+
+        # 检查并删除Crashes目录
+        crashes_dir="${destinationDir}/Crashes"
+        if [ -d "$crashes_dir" ]; then
+            rm -rf "$crashes_dir"
+            echo "Crashes directory has been removed."
+        else
+            echo "Crashes directory does not exist."
+        fi
+
+        # 查找以webcache开头的目录并删除它们
+        find "$destinationDir" -type d -name 'webcache*' -exec rm -rf {} + 2>/dev/null
+
+        echo "All webcache directories have been removed, if any existed."
+
+        # 重新启动 pal-server 服务，以应用新的存档
+        sudo systemctl start pal-server
+
+        # 输出结束语表示脚本执行完毕
+        echo "Save file restoration complete, and pal-server has been restarted."
+    Loop:
+      Items: '{{ getInstance.instanceIds }}'
+  - Name: RunCommandForWindows
+    When:
+      Fn::Equals:
+        - '{{ queryInstanceOSType.OSType }}'
+        - windows
+    Action: ACS::ECS::RunCommand
+    Description:
+      en: Downloads file to the ECS instances adn run command
+      zh-cn: 下载文件到实例并执行命令
+    Properties:
+      regionId: '{{ regionId }}'
+      instanceId: '{{ ACS::TaskLoopItem }}'
+      commandType: RunPowerShellScript
+      commandContent: |-
+        # 定义存档路径和备份路径
+        $destinationDir = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved"
+        $savedParentDir = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal"
+        # 定义备份目录，确保它不在源目录的子目录中
+        $backupDir = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved_Backup"
+
+        # 生成备份文件的名称，包含日期以便于区分不同的备份
+        $timestamp = Get-Date -Format "yyyyMMddHHmmss"
+        $backupFileName = "Saved_Backup_$timestamp.zip"
+
+        # 创建备份目录，如果不存在的话
+        if (-not (Test-Path -Path $backupDir)) {
+            New-Item -ItemType Directory -Path $backupDir
+        }
+
+        # 打包指定目录到ZIP文件
+        Compress-Archive -Path $destinationDir -DestinationPath "$backupDir\$backupFileName"
+
+        # 输出备份完成的信息
+        Write-Host "Backup completed: $backupDir\$backupFileName"
+
+        # 停止 pal-server 服务以准备更新存档
+        $ProcessName = "PalServer-Win64-Test-Cmd"
+
+        if (Get-Process -Name $ProcessName -ErrorAction SilentlyContinue) {
+            Stop-Process -Name $ProcessName -Force
+            Start-Sleep -Seconds 1
+        }
+
+        $sourcePath = "{{sourcePath}}"
+        $localZipPath = "C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\WindowsSaved.zip"
+        Invoke-WebRequest -Uri $sourcePath -OutFile $localZipPath
+
+        Write-Host "Downloading save sourcePath: $sourcePath"
+
+        # 确保目标路径存在
+        if (Test-Path -Path $destinationDir) {
+            # 删除现有的Saved目录
+            Remove-Item -Path $destinationDir -Recurse -Force
+        }
+        Expand-Archive -Path $localZipPath -DestinationPath $savedParentDir -Force
+
+        # 删除下载的 zip 文件，清理工作目录
+        Remove-Item -Path $localZipPath -Force
+        # 删除Crashes目录
+        $crashesPath = Join-Path -Path $destinationDir -ChildPath "Crashes"
+        if (Test-Path -Path $crashesPath -PathType Container) {
+            Remove-Item -Path $crashesPath -Recurse -Force
+            Write-Host "Crashes directory has been removed."
+        } else {
+            Write-Host "Crashes directory does not exist."
+        }
+
+        # 删除所有以webcache开头的目录
+        $webcacheDirs = Get-ChildItem -Path $destinationDir -Directory -Filter "webcache*"
+        foreach ($dir in $webcacheDirs) {
+            Remove-Item -Path $dir.FullName -Recurse -Force
+            Write-Host "Removed webcache directory: $($dir.FullName)"
+        }
+
+        # 重新启动 pal-server 服务，以应用新的存档
+        $TaskName = "PalServerAutoStart"
+        Start-ScheduledTask -TaskName $TaskName
+        # 输出结束语表示脚本执行完毕
+        Write-Host "Save file restoration complete, and pal-server has been restarted."
+    Loop:
+      Items: '{{ getInstance.instanceIds }}'
+Metadata:
+  ALIYUN::OOS::Interface:
+    ParameterGroups:
+      - Parameters:
+          - sourcePath
+        Label:
+          default:
+            zh-cn: 配置参数
+            en: Configure Parameters
+      - Parameters:
+          - regionId
+          - targets
+        Label:
+          default:
+            zh-cn: 选择实例
+            en: Select Instances
