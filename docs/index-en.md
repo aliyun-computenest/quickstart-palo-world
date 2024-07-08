@@ -47,11 +47,10 @@ Here ariyun has also recommend several configurations according to the number of
 </tbody>
 </table>
 
-<p><img src="222.jpg" alt="222.jpg" /></p></li>
 <li><p> Configure the server password (remember your password, use it later);</p></li>
 <li> Configure the availability zone (if there are no special requirements, keep the default). </li>
 <li> Configure the parameters of the online service in the advanced configuration column (use the default values without modification).
-<img src="14.jpg" alt="14.jpg" />
+<img src="en_1.jpg" alt="14.jpg" />
 After the configuration is completed, click Next to confirm the submission of the order. </li>
 </ol>
 
@@ -59,10 +58,7 @@ After the configuration is completed, click Next to confirm the submission of th
 
 <ol>
 <li> on the service confirmation page, check agree to the terms of service, click "create now", followed by the payment process.
-<img src="333.jpg" alt="333.jpg" /></li>
 <li> when the prompt of successful submission appears, the service has been created. click "go to the list to view" to see that the service is being deployed.
-<img src="444.jpg" alt="444.jpg" />
-<img src="555.jpg" alt="555.jpg" /></li>
 </ol>
 
 <h3> Step 3: Enter the instance details </h3>
@@ -70,9 +66,8 @@ After the configuration is completed, click Next to confirm the submission of th
 <ol>
 <li> the service can be created in less than 1 minute. when the service status changes to "deployed", click the service instance ID to enter the service details. </li>
 <li> by the time of this step, palu's server-side installation program has been preset in the image of the service, which is very convenient without manual replication.
-<img src="666.jpg" alt="666.jpg" /></li>
 <li> see "magic beast palu server address port", this is the IP address where you built the server, copy this address for the next operation.
-<img src="777.jpg" alt="777.jpg" /></li>
+<img src="en_2.jpg" alt="14.jpg" /></li>
 </ol>
 
 <h2> Login to the game </h2>
@@ -82,9 +77,7 @@ After the configuration is completed, click Next to confirm the submission of th
 <ol>
 <li><p> Log in to your Steam account. </p>
 
-<p><img src="3.png" alt="3.jpg" /></p></li>
 <li><p> Find the Phantom Beast in the Library and start the game.
-<img src="4.png" alt="4.jpg" /></p></li>
 <li><p> In the game menu, select "Join Multiplayer Game (Dedicated Server)"
 <img src="5.png" alt="5.jpg" /></p></li>
 <li><p> let players enter the address and port of your deployed computing nest service instance to play freely ~
@@ -93,15 +86,3 @@ After the configuration is completed, click Next to confirm the submission of th
 
 <p> so far, you have successfully built the magic beast palu Dedicated Server. please have fun with your friends here ~
 |</p>
-
-<h2> Palu Server Update </h2>
-
-<h3> Automatic Updates </h3>
-
-<p> enter operation and maintenance management-> update server version
-<img src="upgrade.png" alt="upgrade.png" /></p>
-
-<h3> Manual deployment </h3>
-
-<p> Reference documentation
-https://developer.aliyun.com/article/1428087</p>
