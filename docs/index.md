@@ -255,7 +255,7 @@ sudo systemctl restart pal-server
 
 您有任何问题或者建议，可以使用微信或钉钉扫描下方二维码，加人我们的官方服务群，我们将非常欢迎您的建议和反馈～
 
-   <img src="15.png" width="1000" height="400" align="bottom"/>
+   <img src="img.png" height="400" align="bottom"/>
 
 ##  常见问题
 
