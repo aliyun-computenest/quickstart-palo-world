@@ -1,0 +1,394 @@
+Service:
+  DeployType: ros
+  DeployMetadata:
+    SupplierDeployMetadata:
+      DeployTimeout: 7200
+      ArtifactRelation:
+        linux:
+          ArtifactId: ${Artifact.Artifact_1.ArtifactId}
+          ArtifactVersion: ${Artifact.Artifact_1.ArtifactVersion}
+        windows:
+          ArtifactId: ${Artifact.Artifact_2.ArtifactId}
+          ArtifactVersion: ${Artifact.Artifact_2.ArtifactVersion}
+      SupplierTemplateConfigs:
+        - Name: ECS
+          Url: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/adc9feb4-026e-439a-b8d2-e0d74998f7de.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=46lfsm0ZooGD6RtDM%2F3je2NSd4U%3D
+          PredefinedParameters:
+            - Name: 热卖：最多支持8个玩家
+              Parameters:
+                PayType: PrePaid
+                EcsInstanceType: ecs.e-c1m4.xlarge
+                SystemDiskCategory: cloud_essd_entry
+                SystemDiskSize: 100
+                InternetChargeType: PayByBandwidth
+                InternetMaxBandwidthOut: 10
+              OrderList:
+                - PayType
+                - EcsInstanceType
+                - SystemDiskCategory
+                - SystemDiskSize
+                - InternetChargeType
+                - InternetMaxBandwidthOut
+              Type: Normal
+              Description: 性能强劲不卡顿，入门尝鲜更尽兴
+            - Name: 力荐：最多支持20个玩家
+              Parameters:
+                PayType: PrePaid
+                EcsInstanceType:
+                  - ecs.e-c1m4.2xlarge
+                SystemDiskCategory: cloud_essd_entry
+                SystemDiskSize: 100
+                InternetChargeType: PayByBandwidth
+                InternetMaxBandwidthOut: 10
+              OrderList:
+                - PayType
+                - EcsInstanceType
+                - SystemDiskCategory
+                - SystemDiskSize
+                - InternetChargeType
+                - InternetMaxBandwidthOut
+              Type: Normal
+              Description: 全天在线不卡顿，多人开黑更尽兴
+            - Name: 自定义套餐
+              Parameters: {}
+              OrderList:
+                - PayType
+                - EcsInstanceType
+                - SystemDiskCategory
+                - SystemDiskSize
+                - InternetChargeType
+                - InternetMaxBandwidthOut
+              Type: Custom
+          AllowedRegions:
+            - cn-shanghai
+            - cn-hangzhou
+            - cn-heyuan
+            - cn-shenzhen
+            - cn-wulanchabu
+            - cn-huhehaote
+            - cn-zhangjiakou
+            - cn-qingdao
+            - cn-guangzhou
+            - cn-fuzhou
+            - cn-wuhan-lr
+            - cn-nanjing
+            - cn-beijing
+    TemplateConfigs:
+      - Name: ECS
+        Url: ros_templates/template1.yaml
+        AllowedRegions:
+          - cn-shanghai
+          - cn-hangzhou
+          - cn-heyuan
+          - cn-shenzhen
+          - cn-wulanchabu
+          - cn-huhehaote
+          - cn-zhangjiakou
+          - cn-qingdao
+          - cn-guangzhou
+          - cn-fuzhou
+          - cn-wuhan-lr
+          - cn-nanjing
+          - cn-beijing
+        PredefinedParameters:
+          - Name: 热卖：最多支持8个玩家
+            Parameters:
+              PayType: PrePaid
+              EcsInstanceType: ecs.e-c1m4.xlarge
+              SystemDiskCategory: cloud_essd_entry
+              SystemDiskSize: 100
+              InternetChargeType: PayByBandwidth
+              InternetMaxBandwidthOut: 10
+            OrderList:
+              - PayType
+              - EcsInstanceType
+              - SystemDiskCategory
+              - SystemDiskSize
+              - InternetChargeType
+              - InternetMaxBandwidthOut
+            Type: Normal
+            Description: 性能强劲不卡顿，入门尝鲜更尽兴
+          - Name: 力荐：最多支持20个玩家
+            Parameters:
+              PayType: PrePaid
+              EcsInstanceType:
+                - ecs.e-c1m4.2xlarge
+              SystemDiskCategory: cloud_essd_entry
+              SystemDiskSize: 100
+              InternetChargeType: PayByBandwidth
+              InternetMaxBandwidthOut: 10
+            OrderList:
+              - PayType
+              - EcsInstanceType
+              - SystemDiskCategory
+              - SystemDiskSize
+              - InternetChargeType
+              - InternetMaxBandwidthOut
+            Type: Normal
+            Description: 全天在线不卡顿，多人开黑更尽兴
+          - Name: 自定义套餐
+            Parameters: {}
+            OrderList:
+              - PayType
+              - EcsInstanceType
+              - SystemDiskCategory
+              - SystemDiskSize
+              - InternetChargeType
+              - InternetMaxBandwidthOut
+            Type: Custom
+        DeployScene: ECS
+    NetworkMetadata:
+      EnablePrivateVpcConnection: false
+      EnableReversePrivateVpcConnection: false
+    ServiceInstanceNameRule:
+      Prefix: palworld-
+      UseDefaultValue: false
+  OperationMetadata:
+    CustomOperations:
+      Actions:
+        - TemplateNames:
+            - ECS
+          Name: 关机
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/69ca093f-7530-4838-93b1-61379a11a3bc.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=YylDutfu2Vqdim0sqQFvvL1R%2Bt0%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 开机
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/975b3c14-6620-4a44-aa21-2139735490df.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=A3KRPrnvDHtGfzjGkyJJ0ch1uMM%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 重启游戏
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/8295b523-7000-4a98-aa9e-d028f1573eba.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=3PXMT1TGr9JzZAvXFOGvMCF8im4%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 定时重启游戏
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/185cc030-be1b-4491-867e-8989f2324b25.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=YGCM1x62kA77JjdHJipHI6a3De8%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 导出存档
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/2b2e4c64-1a79-4f2e-9c7c-7f9e9d145945.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=hSGCpudIxQxkiuqbJ55g%2B%2F5THrk%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 导入存档
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/76deed46-c94f-4921-bfa7-af6b2d0b5811.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=hl048fgxMPRAs0a0UfJVsfLlbbY%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 清除存档
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/4a62c371-070b-442e-bdb6-daba19e90f4c.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=WkeFexbBdIJDvxcMxJWSlbjTOh0%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 定时备份存档
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/326fbf45-5213-4aaa-bc06-e35e4ab9c8e1.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=4qlIvd2jloMZmbBS94fQrnUTUg4%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 升级游戏服务端
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/0040125d-62aa-41f8-a623-90d35afc3dc4.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=MnMtIDDtkf%2BYCzMmURMYUYt3HtU%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 修改虚拟内存
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/4587acc0-fe5c-4be1-8e81-79bc4418b533.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=4znhx7%2Fw16Ov11tathkyewPuVl8%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 修改ECS密码(实例会重启)
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/273e6d15-92f3-43ef-a194-d6cda62a4115.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=Of%2Faq6vWKO09Imf7Ta9TnR6mvZI%3D
+          Operator: All
+        - TemplateNames:
+            - ECS
+          Name: 重置游戏
+          Type: OOS
+          TemplateUrl: 
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/0572c962-deba-4820-80e1-92a1ec40255b.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=Vb8ycNTbjw2NwjQZSK3aKbbxirw%3D
+          Operator: All
+    ModifyParametersConfig:
+      - TemplateName: ECS
+        Operation:
+          - Name: 修改游戏参数
+            Description: 修改游戏参数，请确保ECS实例处于运行中状态。
+            Type: Custom
+            SupportPredefinedParameters: false
+            Parameters:
+              - Difficulty
+              - DayTimeSpeedRate
+              - NightTimeSpeedRate
+              - ExpRate
+              - PalCaptureRate
+              - PalSpawnNumRate
+              - PalDamageRateAttack
+              - PalDamageRateDefense
+              - PlayerDamageRateAttack
+              - PlayerDamageRateDefense
+              - PlayerStomachDecreaceRate
+              - PlayerStaminaDecreaceRate
+              - PlayerAutoHPRegeneRate
+              - PlayerAutoHpRegeneRateInSleep
+              - PalStomachDecreaceRate
+              - PalStaminaDecreaceRate
+              - PalAutoHPRegeneRate
+              - PalAutoHpRegeneRateInSleep
+              - BuildObjectDamageRate
+              - BuildObjectDeteriorationDamageRate
+              - CollectionDropRate
+              - CollectionObjectHpRate
+              - CollectionObjectRespawnSpeedRate
+              - EnemyDropItemRate
+              - DeathPenalty
+              - GuildPlayerMaxNum
+              - PalEggDefaultHatchingTime
+              - ServerPlayerMaxNum
+              - ServerName
+              - ServerDescription
+              - AdminPassword
+              - RCONEnabled
+              - ServerPassword
+              - AutoResetGuildTimeNoOnlinePlayers
+              - BaseCampMaxNum
+              - BaseCampWorkerMaxNum
+              - CoopPlayerMaxNum
+              - DropItemMaxNum
+              - DropItemAliveMaxHours
+              - DropItemMaxNum_UNKO
+              - WorkSpeedRate
+              - bActiveUNKO
+              - bAutoResetGuildNoOnlinePlayers
+              - bCanPickupOtherGuildDeathPenaltyDrop
+              - bEnableAimAssistPad
+              - bEnableDefenseOtherGuildPlayer
+              - bEnableFastTravel
+              - bEnableFriendlyFire
+              - bEnableInvaderEnemy
+              - bEnableNonLoginPenalty
+              - bEnablePlayerToPlayerDamage
+              - bExistPlayerAfterLogout
+              - bIsMultiplay
+              - bIsPvP
+              - bIsStartLocationSelectByMap
+              - BaseCampMaxNumInGuild
+              - SupplyDropSpan
+              - ItemWeightRate
+              - RandomizerType
+              - bHardcore
+              - bPalLost
+            EnableLogging: false
+    PrometheusConfigMap:
+      ECS:
+        EnablePrometheus: false
+    SupportBackup: false
+  ServiceType: private
+  ServiceInfo:
+    - Agreements: []
+      Image: resources/icons/service_logo_zh-CN.png
+      Locale: zh-CN
+      Name: 幻兽帕鲁 - 快速部署
+      ShortDescription: 幻兽帕鲁是Pocketpair开发的一款开放世界生存制作游戏，游戏于2024年1月18日发行抢先体验版本。游戏中，玩家可以在广阔的世界中收集神奇的生物“帕鲁”，派他们进行战斗、建造、做农活，工业生产等。
+      Softwares: []
+    - Agreements: []
+      Image: resources/icons/service_logo_en-US.png
+      Locale: en-US
+      Name: PalWorld-Rapid Deployment
+      ShortDescription: Phantom Beast Palu is an open world survival production game developed by Pocketpair. The game will be released on January 18, 2024. In the game, players can
+        collect magical creatures "Palu" in the vast world and send them to fight, build, do farm work, industrial production, etc.
+      Softwares: []
+  ShareType: Public
+  ApprovalType: Manual
+Artifact:
+  Artifact_1:
+    ArtifactType: EcsImage
+    ArtifactName: palwin0125
+    Description: Palword_Linux_240320_40GB
+    ArtifactProperty:
+      RegionId: ${ImageBuilder.EcsImage_1.RegionId}
+      ImageId: ${ImageBuilder.EcsImage_1.SourceImageId}
+    SupportRegionIds:
+      - cn-shanghai
+      - cn-hangzhou
+      - cn-heyuan
+      - cn-shenzhen
+      - cn-wulanchabu
+      - cn-huhehaote
+      - cn-zhangjiakou
+      - cn-qingdao
+      - cn-guangzhou
+      - cn-fuzhou
+      - cn-wuhan-lr
+      - cn-nanjing
+      - cn-beijing
+  Artifact_2:
+    ArtifactType: EcsImage
+    ArtifactName: palwinwin0125
+    Description: Palword_Windows_240320_40GB
+    ArtifactProperty:
+      RegionId: ${ImageBuilder.EcsImage_2.RegionId}
+      ImageId: ${ImageBuilder.EcsImage_2.SourceImageId}
+    SupportRegionIds:
+      - cn-shanghai
+      - cn-hangzhou
+      - cn-heyuan
+      - cn-shenzhen
+      - cn-wulanchabu
+      - cn-huhehaote
+      - cn-zhangjiakou
+      - cn-qingdao
+      - cn-guangzhou
+      - cn-fuzhou
+      - cn-wuhan-lr
+      - cn-nanjing
+      - cn-beijing
+ImageBuilder:
+  EcsImage_1:
+    RegionId: cn-hangzhou
+    SourceImageId: m-bp1hcdskagil3368y01n
+    SystemDiskSize: 40
+    InstanceType: ecs.c6.large
+    InternetMaxBandwidthOut: 10
+    CommandType: RunShellScript
+    Timeout: 10800
+    Tags: [ ]
+    CommandContent: |-
+        #!/bin/bash
+        sudo systemctl stop pal-server
+        /usr/games/steamcmd +login anonymous +app_update 2394010 validate +quit
+        sudo systemctl start pal-server
+
+  EcsImage_2:
+    RegionId: cn-heyuan
+    SourceImageId: m-f8z9iqwukcv2ghhhn6zw
+    SystemDiskSize: 40
+    InstanceType: ecs.c6.large
+    InternetMaxBandwidthOut: 10
+    CommandType: RunPowerShellScript
+    Timeout: 10800
+    Tags: [ ]
+    CommandContent: |-
+        Start-Process "C:\Program Files\PalServer\steam\steamcmd.exe" -ArgumentList "+login anonymous +app_update 2394010 validate +quit" -Wait
