@@ -308,13 +308,13 @@ Service:
   ServiceType: private
   ServiceInfo:
     - Agreements: []
-      Image: resources/icons/service_logo_zh-CN.png
+      Image: resources/icons/service_logo.png
       Locale: zh-CN
       Name: 幻兽帕鲁 - 快速部署
       ShortDescription: 幻兽帕鲁是Pocketpair开发的一款开放世界生存制作游戏，游戏于2024年1月18日发行抢先体验版本。游戏中，玩家可以在广阔的世界中收集神奇的生物“帕鲁”，派他们进行战斗、建造、做农活，工业生产等。
       Softwares: []
     - Agreements: []
-      Image: resources/icons/service_logo_en-US.png
+      Image: resources/icons/service_logo.png
       Locale: en-US
       Name: PalWorld-Rapid Deployment
       ShortDescription: Phantom Beast Palu is an open world survival production game developed by Pocketpair. The game will be released on January 18, 2024. In the game, players can
