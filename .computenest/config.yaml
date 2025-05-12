@@ -385,8 +385,8 @@ ImageBuilder:
     RegionId: cn-heyuan
     SourceImageId: m-f8z9iqwukcv2ghhhn6zw
     SystemDiskSize: 40
-    InstanceType: ecs.c6.large
-    InternetMaxBandwidthOut: 10
+    InstanceType: ecs.c7.2xlarge
+    InternetMaxBandwidthOut: 200
     CommandType: RunPowerShellScript
     Timeout: 10800
     Tags: [ ]
