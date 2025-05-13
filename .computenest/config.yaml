@@ -284,8 +284,8 @@ ImageBuilder:
     RegionId: cn-hangzhou
     SourceImageId: m-bp1hcdskagil3368y01n
     SystemDiskSize: 40
-    InstanceType: ecs.c6.large
-    InternetMaxBandwidthOut: 10
+    InstanceType: ecs.c7.2xlarge
+    InternetMaxBandwidthOut: 100
     CommandType: RunShellScript
     Timeout: 10800
     Tags: [ ]
