@@ -386,7 +386,7 @@ ImageBuilder:
     SourceImageId: m-f8z9iqwukcv2ghhhn6zw
     SystemDiskSize: 40
     InstanceType: ecs.c7.2xlarge
-    InternetMaxBandwidthOut: 200
+    InternetMaxBandwidthOut: 100
     CommandType: RunPowerShellScript
     Timeout: 10800
     Tags: [ ]
