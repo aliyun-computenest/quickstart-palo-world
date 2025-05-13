@@ -13,7 +13,7 @@ Service:
       SupplierTemplateConfigs:
         - Name: ECS
           Url: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/adc9feb4-026e-439a-b8d2-e0d74998f7de.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=46lfsm0ZooGD6RtDM%2F3je2NSd4U%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/adc9feb4-026e-439a-b8d2-e0d74998f7de.json
           PredefinedParameters:
             - Name: 热卖：最多支持8个玩家
               Parameters:
@@ -152,84 +152,84 @@ Service:
           Name: 关机
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/69ca093f-7530-4838-93b1-61379a11a3bc.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=YylDutfu2Vqdim0sqQFvvL1R%2Bt0%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/69ca093f-7530-4838-93b1-61379a11a3bc.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 开机
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/975b3c14-6620-4a44-aa21-2139735490df.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=A3KRPrnvDHtGfzjGkyJJ0ch1uMM%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/975b3c14-6620-4a44-aa21-2139735490df.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 重启游戏
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/8295b523-7000-4a98-aa9e-d028f1573eba.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=3PXMT1TGr9JzZAvXFOGvMCF8im4%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/8295b523-7000-4a98-aa9e-d028f1573eba.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 定时重启游戏
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/185cc030-be1b-4491-867e-8989f2324b25.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=YGCM1x62kA77JjdHJipHI6a3De8%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/185cc030-be1b-4491-867e-8989f2324b25.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 导出存档
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/2b2e4c64-1a79-4f2e-9c7c-7f9e9d145945.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=hSGCpudIxQxkiuqbJ55g%2B%2F5THrk%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/2b2e4c64-1a79-4f2e-9c7c-7f9e9d145945.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 导入存档
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/76deed46-c94f-4921-bfa7-af6b2d0b5811.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=hl048fgxMPRAs0a0UfJVsfLlbbY%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/76deed46-c94f-4921-bfa7-af6b2d0b5811.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 清除存档
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/4a62c371-070b-442e-bdb6-daba19e90f4c.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=WkeFexbBdIJDvxcMxJWSlbjTOh0%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/4a62c371-070b-442e-bdb6-daba19e90f4c.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 定时备份存档
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/326fbf45-5213-4aaa-bc06-e35e4ab9c8e1.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=4qlIvd2jloMZmbBS94fQrnUTUg4%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/326fbf45-5213-4aaa-bc06-e35e4ab9c8e1.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 升级游戏服务端
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/0040125d-62aa-41f8-a623-90d35afc3dc4.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=MnMtIDDtkf%2BYCzMmURMYUYt3HtU%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/0040125d-62aa-41f8-a623-90d35afc3dc4.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 修改虚拟内存
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/4587acc0-fe5c-4be1-8e81-79bc4418b533.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=4znhx7%2Fw16Ov11tathkyewPuVl8%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/4587acc0-fe5c-4be1-8e81-79bc4418b533.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 修改ECS密码(实例会重启)
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/273e6d15-92f3-43ef-a194-d6cda62a4115.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=Of%2Faq6vWKO09Imf7Ta9TnR6mvZI%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/273e6d15-92f3-43ef-a194-d6cda62a4115.json
           Operator: All
         - TemplateNames:
             - ECS
           Name: 重置游戏
           Type: OOS
           TemplateUrl: 
-            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/0572c962-deba-4820-80e1-92a1ec40255b.json?Expires=1745402425&OSSAccessKeyId=LTAI5tCYphFhocJemeMWmXst&Signature=Vb8ycNTbjw2NwjQZSK3aKbbxirw%3D
+            https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/0572c962-deba-4820-80e1-92a1ec40255b.json
           Operator: All
     ModifyParametersConfig:
       - TemplateName: ECS
