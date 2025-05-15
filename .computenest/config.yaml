@@ -281,8 +281,8 @@ Artifact:
       - cn-beijing
 ImageBuilder:
   EcsImage_1:
-    RegionId: cn-hangzhou
-    SourceImageId: m-bp1hcdskagil3368y01n
+    RegionId: ap-southeast-1
+    SourceImageId: m-t4ne8j0bphwa2yxkg441
     SystemDiskSize: 40
     InstanceType: ecs.c7.2xlarge
     InternetMaxBandwidthOut: 100
@@ -296,8 +296,8 @@ ImageBuilder:
         sudo systemctl start pal-server
 
   EcsImage_2:
-    RegionId: cn-heyuan
-    SourceImageId: m-f8z9iqwukcv2ghhhn6zw
+    RegionId: ap-southeast-1
+    SourceImageId: m-t4nc6dx09m4j165sz2tf
     SystemDiskSize: 40
     InstanceType: ecs.c7.2xlarge
     InternetMaxBandwidthOut: 100
