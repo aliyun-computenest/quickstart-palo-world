@@ -12,6 +12,7 @@ Service:
           ArtifactVersion: ${Artifact.Artifact_2.ArtifactVersion}
       SupplierTemplateConfigs:
         - Name: ECS
+          Url: https://service-info-private.oss-cn-hangzhou.aliyuncs.com/1853370294850618/template/adc9feb4-026e-439a-b8d2-e0d74998f7de.json
           PredefinedParameters:
             - Name: 热卖：最多支持8个玩家
               Parameters:
