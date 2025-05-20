@@ -1,0 +1,12 @@
+caseId: stc-3db0c06a4be443dbb573
+parameters:
+  EcsInstanceType: ecs.e-c1m4.2xlarge
+  InstancePassword: 123!@#qwE
+  InternetChargeType: PayByTraffic
+  InternetMaxBandwidthOut: '100'
+  PayType: PostPaid
+  ServerName: test-test
+  ServerPassword: test123A
+  SystemDiskCategory: cloud_essd
+  SystemDiskSize: '100'
+templateName: ECS
