@@ -282,7 +282,7 @@ Artifact:
       - cn-beijing
 ImageBuilder:
   EcsImage_1:
-    RegionId: ap-southeast-1
+    RegionId: cn-hangzhou
     SourceImageId: m-t4ne8j0bphwa2yxkg441
     SystemDiskSize: 40
     InstanceType: ecs.c7.2xlarge
@@ -297,7 +297,7 @@ ImageBuilder:
         sudo systemctl start pal-server
 
   EcsImage_2:
-    RegionId: ap-southeast-1
+    RegionId: cn-hangzhou
     SourceImageId: m-t4nc6dx09m4j165sz2tf
     SystemDiskSize: 40
     InstanceType: ecs.c7.2xlarge
