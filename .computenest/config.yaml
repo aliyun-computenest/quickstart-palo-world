@@ -11,7 +11,7 @@ Service:
           ArtifactId: ${Artifact.Artifact_2.ArtifactId}
           ArtifactVersion: ${Artifact.Artifact_2.ArtifactVersion}
       SupplierTemplateConfigs:
-        - Name: ECS
+        - Name: 新建ECS实例
           Url: ros_templates/template1.yaml
           PredefinedParameters:
             - Name: 热卖：最多支持8个玩家
@@ -66,15 +66,30 @@ Service:
             - cn-shenzhen
             - cn-wulanchabu
             - cn-huhehaote
-            - cn-zhangjiakou
             - cn-qingdao
             - cn-guangzhou
             - cn-fuzhou
             - cn-wuhan-lr
             - cn-nanjing
             - cn-beijing
+        - Name: 选择ECS实例
+          Url: ros_templates/template2.yaml
+          PredefinedParameters: []
+          AllowedRegions:
+            - cn-shanghai
+            - cn-hangzhou
+            - cn-heyuan
+            - cn-shenzhen
+            - cn-wulanchabu
+            - cn-huhehaote
+            - cn-qingdao
+            - cn-guangzhou
+            - cn-beijing
+            - cn-nanjing
+            - cn-fuzhou
+            - cn-wuhan-lr
     TemplateConfigs:
-      - Name: ECS
+      - Name: 新建ECS实例
         Url: ros_templates/template1.yaml
         AllowedRegions:
           - cn-shanghai
@@ -83,7 +98,6 @@ Service:
           - cn-shenzhen
           - cn-wulanchabu
           - cn-huhehaote
-          - cn-zhangjiakou
           - cn-qingdao
           - cn-guangzhou
           - cn-fuzhou
@@ -140,6 +154,26 @@ Service:
         OutputConfigs:
           - OutputKey: __biubiu__
             EnableWebProxy: false
+      - Name: 选择ECS实例
+        Url: ros_templates/template2.yaml
+        AllowedRegions:
+          - cn-shanghai
+          - cn-hangzhou
+          - cn-heyuan
+          - cn-shenzhen
+          - cn-wulanchabu
+          - cn-huhehaote
+          - cn-qingdao
+          - cn-guangzhou
+          - cn-beijing
+          - cn-nanjing
+          - cn-fuzhou
+          - cn-wuhan-lr
+        PredefinedParameters: []
+        DeployScene: ECS
+        OutputConfigs:
+          - OutputKey: __biubiu__
+            EnableWebProxy: false
     NetworkMetadata:
       EnablePrivateVpcConnection: false
       EnableReversePrivateVpcConnection: false
@@ -147,7 +181,7 @@ Service:
       Prefix: palworld-
       UseDefaultValue: false
     ModifyParametersConfig:
-      - TemplateName: ECS
+      - TemplateName: 新建ECS实例
         Operation:
           - Name: 修改游戏参数
             Description: 修改游戏参数，请确保ECS实例处于运行中状态。
@@ -212,100 +246,99 @@ Service:
               - BaseCampMaxNumInGuild
               - SupplyDropSpan
               - ItemWeightRate
-              - RandomizerType
-              - bHardcore
               - bPalLost
+              - bAllowGlobalPalboxImport
+              - bAllowGlobalPalboxExport
             EnableLogging: false
     PrometheusConfigMap:
-      ECS:
+      新建ECS实例:
+        EnablePrometheus: false
+      选择ECS实例:
         EnablePrometheus: false
     SupportBackup: false
   ServiceType: private
   ServiceInfo:
     - Agreements: []
-      Image: resources/icons/service_logo.png
+      Image: resources/icons/service_logo_zh-CN.png
       Locale: zh-CN
       Name: 幻兽帕鲁 - 快速部署
       ShortDescription: 幻兽帕鲁是Pocketpair开发的一款开放世界生存制作游戏，游戏于2024年1月18日发行抢先体验版本。游戏中，玩家可以在广阔的世界中收集神奇的生物“帕鲁”，派他们进行战斗、建造、做农活，工业生产等。
-      Softwares: []
     - Agreements: []
-      Image: resources/icons/service_logo.png
+      Image: resources/icons/service_logo_en-US.png
       Locale: en-US
       Name: PalWorld-Rapid Deployment
       ShortDescription: Phantom Beast Palu is an open world survival production game developed by Pocketpair. The game will be released on January 18, 2024. In the game, players can
         collect magical creatures "Palu" in the vast world and send them to fight, build, do farm work, industrial production, etc.
-      Softwares: []
   ShareType: Public
   ApprovalType: Manual
 Artifact:
   Artifact_1:
     ArtifactType: EcsImage
     ArtifactName: palwin0125
-    Description: Palword_Linux_240320_40GB
+    Description: Pal_Linux_250512
     ArtifactProperty:
-      RegionId: ${ImageBuilder.EcsImage_1.RegionId}
-      ImageId: ${ImageBuilder.EcsImage_1.SourceImageId}
+      ImageId: m-7xv0b16talt5x6hy86y9
+      RegionId: cn-guangzhou
     SupportRegionIds:
-      - cn-shanghai
-      - cn-hangzhou
-      - cn-heyuan
-      - cn-shenzhen
-      - cn-wulanchabu
-      - cn-huhehaote
-      - cn-zhangjiakou
       - cn-qingdao
+      - cn-beijing
+      - cn-zhangjiakou
+      - cn-huhehaote
+      - cn-wulanchabu
+      - cn-hangzhou
+      - cn-shanghai
+      - cn-nanjing
+      - cn-shenzhen
+      - cn-heyuan
       - cn-guangzhou
       - cn-fuzhou
       - cn-wuhan-lr
-      - cn-nanjing
-      - cn-beijing
+      - cn-chengdu
+      - cn-hongkong
+      - ap-northeast-1
+      - ap-northeast-2
       - ap-southeast-1
+      - ap-southeast-3
+      - ap-southeast-6
+      - ap-southeast-5
+      - ap-southeast-7
+      - us-east-1
+      - us-west-1
+      - eu-west-1
+      - me-east-1
+      - eu-central-1
   Artifact_2:
     ArtifactType: EcsImage
     ArtifactName: palwinwin0125
-    Description: Palword_Windows_240320_40GB
+    Description: Pal_Windows_250512
     ArtifactProperty:
-      RegionId: ${ImageBuilder.EcsImage_2.RegionId}
-      ImageId: ${ImageBuilder.EcsImage_2.SourceImageId}
+      ImageId: m-7xveqzwjv5jl36cijhxh
+      RegionId: cn-guangzhou
     SupportRegionIds:
-      - cn-shanghai
-      - cn-hangzhou
-      - cn-heyuan
-      - cn-shenzhen
-      - cn-wulanchabu
-      - cn-huhehaote
-      - cn-zhangjiakou
       - cn-qingdao
+      - cn-beijing
+      - cn-zhangjiakou
+      - cn-huhehaote
+      - cn-wulanchabu
+      - cn-hangzhou
+      - cn-shanghai
+      - cn-nanjing
+      - cn-shenzhen
+      - cn-heyuan
       - cn-guangzhou
       - cn-fuzhou
       - cn-wuhan-lr
-      - cn-nanjing
-      - cn-beijing
+      - cn-chengdu
+      - cn-hongkong
+      - ap-northeast-1
+      - ap-northeast-2
       - ap-southeast-1
-ImageBuilder:
-  EcsImage_1:
-    RegionId: ap-southeast-1
-    SourceImageId: m-t4ne8j0bphwa2yxkg441
-    SystemDiskSize: 40
-    InstanceType: ecs.c7.2xlarge
-    InternetMaxBandwidthOut: 100
-    CommandType: RunShellScript
-    Timeout: 10800
-    Tags: [ ]
-    CommandContent: |-
-        #!/bin/bash
-        sudo systemctl stop pal-server
-        /usr/games/steamcmd +login anonymous +app_update 2394010 validate +quit
-        sudo systemctl start pal-server
-
-  EcsImage_2:
-    RegionId: ap-southeast-1
-    SourceImageId: m-t4nc6dx09m4j165sz2tf
-    SystemDiskSize: 40
-    InstanceType: ecs.c7.2xlarge
-    InternetMaxBandwidthOut: 100
-    CommandType: RunPowerShellScript
-    Timeout: 10800
-    Tags: [ ]
-    CommandContent: |-
-        Start-Process "C:\Program Files\PalServer\steam\steamcmd.exe" -ArgumentList "+login anonymous +app_update 2394010 validate +quit" -Wait
+      - ap-southeast-3
+      - ap-southeast-6
+      - ap-southeast-5
+      - ap-southeast-7
+      - us-east-1
+      - us-west-1
+      - eu-west-1
+      - me-east-1
+      - eu-central-1
