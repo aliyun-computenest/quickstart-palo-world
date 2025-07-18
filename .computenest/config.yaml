@@ -275,70 +275,70 @@ Artifact:
   Artifact_1:
     ArtifactType: EcsImage
     ArtifactName: palwin0125
-    Description: Pal_Linux_250512
+    Description: Palword_Linux_240320_40GB
     ArtifactProperty:
-      ImageId: m-7xv0b16talt5x6hy86y9
-      RegionId: cn-guangzhou
+      RegionId: ${ImageBuilder.EcsImage_1.RegionId}
+      ImageId: ${ImageBuilder.EcsImage_1.SourceImageId}
     SupportRegionIds:
-      - cn-qingdao
-      - cn-beijing
-      - cn-zhangjiakou
-      - cn-huhehaote
-      - cn-wulanchabu
-      - cn-hangzhou
       - cn-shanghai
-      - cn-nanjing
-      - cn-shenzhen
+      - cn-hangzhou
       - cn-heyuan
+      - cn-shenzhen
+      - cn-wulanchabu
+      - cn-huhehaote
+      - cn-zhangjiakou
+      - cn-qingdao
       - cn-guangzhou
       - cn-fuzhou
       - cn-wuhan-lr
-      - cn-chengdu
-      - cn-hongkong
-      - ap-northeast-1
-      - ap-northeast-2
+      - cn-nanjing
+      - cn-beijing
       - ap-southeast-1
-      - ap-southeast-3
-      - ap-southeast-6
-      - ap-southeast-5
-      - ap-southeast-7
-      - us-east-1
-      - us-west-1
-      - eu-west-1
-      - me-east-1
-      - eu-central-1
   Artifact_2:
     ArtifactType: EcsImage
     ArtifactName: palwinwin0125
-    Description: Pal_Windows_250512
+    Description: Palword_Windows_240320_40GB
     ArtifactProperty:
-      ImageId: m-7xveqzwjv5jl36cijhxh
-      RegionId: cn-guangzhou
+      RegionId: ${ImageBuilder.EcsImage_2.RegionId}
+      ImageId: ${ImageBuilder.EcsImage_2.SourceImageId}
     SupportRegionIds:
-      - cn-qingdao
-      - cn-beijing
-      - cn-zhangjiakou
-      - cn-huhehaote
-      - cn-wulanchabu
-      - cn-hangzhou
       - cn-shanghai
-      - cn-nanjing
-      - cn-shenzhen
+      - cn-hangzhou
       - cn-heyuan
+      - cn-shenzhen
+      - cn-wulanchabu
+      - cn-huhehaote
+      - cn-zhangjiakou
+      - cn-qingdao
       - cn-guangzhou
       - cn-fuzhou
       - cn-wuhan-lr
-      - cn-chengdu
-      - cn-hongkong
-      - ap-northeast-1
-      - ap-northeast-2
+      - cn-nanjing
+      - cn-beijing
       - ap-southeast-1
-      - ap-southeast-3
-      - ap-southeast-6
-      - ap-southeast-5
-      - ap-southeast-7
-      - us-east-1
-      - us-west-1
-      - eu-west-1
-      - me-east-1
-      - eu-central-1
+ImageBuilder:
+  EcsImage_1:
+    RegionId: ap-southeast-1
+    SourceImageId: m-t4ne8j0bphwa2yxkg441
+    SystemDiskSize: 40
+    InstanceType: ecs.c7.2xlarge
+    InternetMaxBandwidthOut: 100
+    CommandType: RunShellScript
+    Timeout: 10800
+    Tags: [ ]
+    CommandContent: |-
+        #!/bin/bash
+        sudo systemctl stop pal-server
+        /usr/games/steamcmd +login anonymous +app_update 2394010 validate +quit
+        sudo systemctl start pal-server
+  EcsImage_2:
+    RegionId: ap-hangzhou
+    SourceImageId: m-bp1gfrkhnal54vvy4aau
+    SystemDiskSize: 40
+    InstanceType: ecs.c7.2xlarge
+    InternetMaxBandwidthOut: 100
+    CommandType: RunPowerShellScript
+    Timeout: 10800
+    Tags: [ ]
+    CommandContent: |-
+        Start-Process "C:\Program Files\PalServer\steam\steamcmd.exe" -ArgumentList "+login anonymous +app_update 2394010 validate +quit" -Wait
