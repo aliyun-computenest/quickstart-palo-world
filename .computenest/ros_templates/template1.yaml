@@ -1551,6 +1551,68 @@ Metadata:
             zh-cn: 游戏参数配置
             en: Server Configuration
         DefaultExpand: false
+    QuickDeployConfig:
+      PackageFields:
+        - Key: EcsInstanceType
+        - Key: SystemDiskCategory
+          Label:
+            zh-cn: 系统盘
+            en: System Disk
+          Value: '${SystemDiskCategory} / ${SystemDiskSize} GB'
+        - Key: InternetChargeType
+          Label:
+            zh-cn: 带宽
+            en: Internet Charge Type
+          Value: '${InternetChargeType} / ${InternetMaxBandwidthOut} Mbps'
+      PredefinedParameters:
+        - Name: 热卖：最多支持8个玩家
+          Parameters:
+            PayType: PrePaid
+            EcsInstanceType: ecs.e-c1m4.xlarge
+            SystemDiskCategory: cloud_essd_entry
+            SystemDiskSize: 100
+            InternetChargeType: PayByBandwidth
+            InternetMaxBandwidthOut: 10
+          OrderList:
+            - PayType
+            - EcsInstanceType
+            - SystemDiskCategory
+            - SystemDiskSize
+            - InternetChargeType
+            - InternetMaxBandwidthOut
+          Type: Normal
+          Description: 性能强劲不卡顿，入门尝鲜更尽兴
+        - Name: 力荐：最多支持20个玩家
+          Parameters:
+            PayType: PrePaid
+            EcsInstanceType: ecs.e-c1m4.2xlarge
+            SystemDiskCategory: cloud_essd_entry
+            SystemDiskSize: 100
+            InternetChargeType: PayByBandwidth
+            InternetMaxBandwidthOut: 10
+          OrderList:
+            - PayType
+            - EcsInstanceType
+            - SystemDiskCategory
+            - SystemDiskSize
+            - InternetChargeType
+            - InternetMaxBandwidthOut
+          Type: Normal
+          Description: 全天在线不卡顿，多人开黑更尽兴
+      CustomFields:
+        - Key: PayPeriodUnit1
+          Label:
+            zh-cn: 支付时长
+            en: Pay Period
+          AssociationProperty: 'PayPeriod:PayPeriodUnit'
+        - Key: OSType
+        - Key: InstancePassword
+          Required: true
+      CostRelatedKeys:
+        - RegionId
+        - PayPeriod
+      AutomaticZone:
+        ZoneIdKey: ZoneId
     EstimateCostBlockedList:
       - InstancePassword
       - ServerName

@@ -294,6 +294,7 @@ Artifact:
       - cn-nanjing
       - cn-beijing
       - ap-southeast-1
+      -cn-chengdu
   Artifact_2:
     ArtifactType: EcsImage
     ArtifactName: palwinwin0125
@@ -316,6 +317,7 @@ Artifact:
       - cn-nanjing
       - cn-beijing
       - ap-southeast-1
+      - cn-chengdu
 ImageBuilder:
   EcsImage_1:
     RegionId: ap-southeast-1
