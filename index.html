@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>3分钟部署幻兽帕鲁联机服务 - Aliyun 计算巢 x quickstart-palo-world</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#3">3分钟部署幻兽帕鲁联机服务</a></li>
+              
+                  <li><a href="#_1">概述</a></li>
+                  
+              
+                  <li><a href="#_2">帕鲁服务端更新</a></li>
+                  
+                      <li class="li-h3"><a href="#_3">自动更新</a></li>
+                  
+                      <li class="li-h3"><a href="#_4">手动部署</a></li>
+                  
+              
+                  <li><a href="#_5">计费说明</a></li>
+                  
+              
+                  <li><a href="#_6">创建云服务器</a></li>
+                  
+                      <li class="li-h3"><a href="#_7">第一步：选择配置</a></li>
+                  
+                      <li class="li-h3"><a href="#_8">第二步：创建服务</a></li>
+                  
+                      <li class="li-h3"><a href="#_9">第三步：进入实例详情</a></li>
+                  
+              
+                  <li><a href="#_10">登录游戏</a></li>
+                  
+              
+                  <li><a href="#linux">Linux服务器</a></li>
+                  
+                      <li class="li-h3"><a href="#_11">替换存档</a></li>
+                  
+                      <li class="li-h3"><a href="#_12">清除存档（回档）</a></li>
+                  
+                      <li class="li-h3"><a href="#_13">修改配置</a></li>
+                  
+              
+                  <li><a href="#windows">Windows服务器</a></li>
+                  
+                      <li class="li-h3"><a href="#_16">连接服务器</a></li>
+                  
+                      <li class="li-h3"><a href="#_17">替换存档</a></li>
+                  
+                      <li class="li-h3"><a href="#_18">清除存档（回档）</a></li>
+                  
+                      <li class="li-h3"><a href="#_19">修改配置</a></li>
+                  
+              
+                  <li><a href="#_20">节约成本</a></li>
+                  
+              
+                  <li><a href="#_21">游戏存档</a></li>
+                  
+                      <li class="li-h3"><a href="#_22">手动存档</a></li>
+                  
+                      <li class="li-h3"><a href="#_23">自动存档</a></li>
+                  
+                      <li class="li-h3"><a href="#_24">恢复存档</a></li>
+                  
+                      <li class="li-h3"><a href="#_25">删除存档</a></li>
+                  
+              
+                  <li><a href="#_27">官方支持</a></li>
+                  
+              
+                  <li><a href="#_28">常见问题</a></li>
+                  
+                      <li class="li-h3"><a href="#_29">删除时提示无法删除，存在预付费资源</a></li>
+                  
+                      <li class="li-h3"><a href="#no-password-has-been-entered">进入游戏提示：No password has been entered.</a></li>
+                  
+                      <li class="li-h3"><a href="#_30">变配服务实例报错</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="3">3分钟部署幻兽帕鲁联机服务</h1>
+<h2 id="_1">概述</h2>
+<pre><code>幻兽帕鲁是Pocketpair开发的一款开放世界生存制作游戏，游戏于2024年1月18日发行抢先体验版本。游戏中，玩家可以在广阔的世界中收集神奇的生物“帕鲁”，派他们进行战斗、建造、做农活，工业生产等。本文介绍如何在阿里云计算巢控制台，快速部署幻兽帕鲁联机服务，实现和朋友一起联机游戏。
+预计部署时间1~2分钟，有任何问题请查看文档底部的微信二维码，进群交流～
+</code></pre>
+<h2 id="_2">帕鲁服务端更新</h2>
+<h3 id="_3">自动更新</h3>
+<p>进入到运维管理-&gt;更新服务端版本
+ <img alt="upgrade.png" src="upgrade.png" /></p>
+<h3 id="_4">手动部署</h3>
+<p>参考文档
+https://developer.aliyun.com/article/1428087</p>
+<h2 id="_5">计费说明</h2>
+<p>幻兽帕鲁联机服务在计算巢上的费用主要涉及：所选vCPU与内存规格、磁盘容量、公网带宽
+计费方式包括：包年包月、按量付费（小时）
+预估费用在创建实例时可实时看到。</p>
+<h2 id="_6">创建云服务器</h2>
+<h3 id="_7">第一步：选择配置</h3>
+<ol>
+<li>服务实例名称（如无特殊要求，保持默认即可）；</li>
+<li>选择部署地域（可以选择离自己最近的城市，如无特殊要求，保持默认即可）；</li>
+<li>选择付费时长（一般选择包月，三个月的优惠幅度更大）；</li>
+<li>选择配置，一般来说配置越高越流畅。这游戏比较吃内存，所以内存尽量在16G以上（Pocketpair官方的推荐配置是4核16G，详见：<a href="https://tech.palworldgame.com/dedicated-server-guide">Palworld tech guide</a>，CPU选4核即可，带宽方面推荐不限流量的固定带宽，延时低，畅玩体验更佳。
+   <img alt="111.jpg" src="111.jpg" />
+   这里阿里云也根据游戏人数不同推荐了几款配置，大家按需即可:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>套餐名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>支持4-8个玩家</td>
+<td>e系列 4核16G，3M带宽不限流量</td>
+</tr>
+<tr>
+<td>支持10-16个玩家</td>
+<td>u1系列 4核32G，10M带宽不限流量</td>
+</tr>
+<tr>
+<td>自定义套餐</td>
+<td>可自由选择ECS配置，适合高阶DIY玩家</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="222.jpg" src="222.jpg" /></p>
+<ol>
+<li>配置服务器密码（记住你的密码，后面要用）；</li>
+<li>配置可用区（如无特殊要求，保持默认即可）。</li>
+<li>在高级配置栏中配置联机服务的参数（不修改则使用默认值）。
+   <img alt="14.jpg" src="14.jpg" />
+⠀配置完成之后，点击下一步，确认提交订单。</li>
+</ol>
+<h3 id="_8">第二步：创建服务</h3>
+<ol>
+<li>在服务确认页面，勾选同意服务条款，点击“立即创建”，后面就是付款流程。
+   <img alt="333.jpg" src="333.jpg" /></li>
+<li>当出现提交成功提示，说明服务已经开始创建，点击“去列表查看”，可以看到服务正在部署中。
+   <img alt="444.jpg" src="444.jpg" />
+   <img alt="555.jpg" src="555.jpg" /></li>
+</ol>
+<h3 id="_9">第三步：进入实例详情</h3>
+<ol>
+<li>服务不到1分钟即可完成创建，当服务的状态变成“已部署”，点击服务实例ID进入服务详情。</li>
+<li>到这一步的时候，帕鲁的服务端安装程序已经预置在服务的镜像里了，无需手动复制，非常方便。
+   <img alt="666.jpg" src="666.jpg" /></li>
+<li>看到“幻兽帕鲁服务器地址端口”，这就是你搭建服务器的IP地址了，复制这个地址用于下一步操作。
+   <img alt="777.jpg" src="777.jpg" /></li>
+</ol>
+<h2 id="_10">登录游戏</h2>
+<p>前置条件：您首先需要在Steam购买幻兽帕鲁（Palworld）。</p>
+<ol>
+<li>登录您的Steam账号。</li>
+</ol>
+<p><img alt="3.jpg" src="3.png" /></p>
+<ol>
+<li>
+<p>在“库”中找到幻兽帕鲁，并开始游戏。
+   <img alt="4.jpg" src="4.png" /></p>
+</li>
+<li>
+<p>在游戏菜单选择“加入多人游戏（专用服务器）”
+   <img alt="5.jpg" src="5.png" /></p>
+</li>
+<li>
+<p>让玩家输入您已部署的计算巢服务实例的地址端口即可畅快开玩～
+   <img alt="6.jpg" src="6.png" /></p>
+</li>
+</ol>
+<p>至此，您已经成功搭建了幻兽帕鲁 Dedicated Server ，请和您的朋友在此中一起畅快游玩吧～</p>
+<h2 id="linux">Linux服务器</h2>
+<h3 id="_11">替换存档</h3>
+<p>参考<a href="https://developer.aliyun.com/article/1428619">幻兽帕鲁服务器存档拷贝教程</a>手动替换</p>
+<h3 id="_12">清除存档（回档）</h3>
+<p>存档清除后，重新启动游戏后将会自动重新开始新游戏。
+参考教程：<a href="https://developer.aliyun.com/article/1429017#slide-0">清除存档</a></p>
+<h3 id="_13">修改配置</h3>
+<h4 id="_14">自动修改配置</h4>
+<ol>
+<li>
+<p>使用计算巢提供的<strong>变配服务实例</strong>功能自动修改:
+   <img alt="16.jpg" src="16.png" /></p>
+</li>
+<li>
+<p>修改配置参数值后点击<strong>确定</strong>开始变配：
+   <img alt="17.jpg" src="17.jpg" /></p>
+</li>
+</ol>
+<h4 id="_15">手动修改配置</h4>
+<ol>
+<li>远程连接ECS实例</li>
+</ol>
+<p><img alt="10.jpg" src="10.jpg" /></p>
+<ol>
+<li>编辑文件</li>
+</ol>
+<p><code># 修改复制文件到目标目录
+   cp /home/ecs-assist-user/.steam/SteamApps/common/PalServer/DefaultPalWorldSettings.ini /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini</code> </p>
+<p><code># 执行修改配置文件的命令
+   nano --softwrap /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini</code>
+   <img alt="11.png" src="11.png" />
+   如果不熟悉如何操作，请参考<a href="https://www.cnblogs.com/linuxws/p/10996085.html">教程</a>。</p>
+<p>移动光标找到要修改的位置进行编辑。编辑完成后按Ctrl+X退出，编辑器会询问是否保存修改，输入Y确认保存。
+   <img alt="12.png" src="12.png" />
+   编辑器提示保存的文件名，回车即可。
+   <img alt="13.png" src="13.png" /></p>
+<p><code># 修改完成后重启服务
+   sudo systemctl restart pal-server</code>
+   配置文件参数说明:</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>英文</th>
+<th>机翻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DayTimeSpeedRate</td>
+<td>Day time speed</td>
+<td>白天速度</td>
+</tr>
+<tr>
+<td>NightTimeSpeedRate</td>
+<td>Night time speed</td>
+<td>夜间速度</td>
+</tr>
+<tr>
+<td>ExpRate</td>
+<td>EXP rate</td>
+<td>经验率</td>
+</tr>
+<tr>
+<td>PalCaptureRate</td>
+<td>Pal capture rate</td>
+<td>好友捕获率</td>
+</tr>
+<tr>
+<td>PalSpawnNumRate</td>
+<td>Pal appearance rate</td>
+<td>Pal出现率</td>
+</tr>
+<tr>
+<td>PalDamageRateAttack</td>
+<td>Damage from pals multipiler</td>
+<td>好友倍增器造成的伤害</td>
+</tr>
+<tr>
+<td>PalDamageRateDefense</td>
+<td>Damage to pals multipiler</td>
+<td>对好友倍增器造成伤害</td>
+</tr>
+<tr>
+<td>PlayerDamageRateAttack</td>
+<td>Damage from player multipiler</td>
+<td>玩家倍增造成的伤害</td>
+</tr>
+<tr>
+<td>PlayerDamageRateDefense</td>
+<td>Damage to player multipiler</td>
+<td>对玩家造成的伤害乘数</td>
+</tr>
+<tr>
+<td>PlayerStomachDecreaceRate</td>
+<td>Player hunger depletion rate</td>
+<td>玩家饥饿消耗率</td>
+</tr>
+<tr>
+<td>PlayerStaminaDecreaceRate</td>
+<td>Player stamina reduction rate</td>
+<td>玩家体力减少率</td>
+</tr>
+<tr>
+<td>PlayerAutoHPRegeneRate</td>
+<td>Player auto HP regeneration rate</td>
+<td>玩家自动HP回复率</td>
+</tr>
+<tr>
+<td>PlayerAutoHpRegeneRateInSleep</td>
+<td>Player sleep HP regeneration rate</td>
+<td>玩家睡眠HP回复率</td>
+</tr>
+<tr>
+<td>PalStomachDecreaceRate</td>
+<td>Pal hunger depletion rate</td>
+<td>伙伴饥饿消耗率</td>
+</tr>
+<tr>
+<td>PalStaminaDecreaceRate</td>
+<td>Pal stamina reduction rate</td>
+<td>帕尔耐力减少率</td>
+</tr>
+<tr>
+<td>PalAutoHPRegeneRate</td>
+<td>Pal auto HP regeneration rate</td>
+<td>Pal自动HP回复率</td>
+</tr>
+<tr>
+<td>PalAutoHpRegeneRateInSleep</td>
+<td>Pal sleep health regeneration rate (in Palbox)</td>
+<td>Pal 睡眠健康恢复率（Palbox 中）</td>
+</tr>
+<tr>
+<td>BuildObjectDamageRate</td>
+<td>Damage to structure multipiler</td>
+<td>多层结构损坏</td>
+</tr>
+<tr>
+<td>BuildObjectDeteriorationDamageRate</td>
+<td>Structure determination rate</td>
+<td>结构测定率</td>
+</tr>
+<tr>
+<td>CollectionDropRate</td>
+<td>Getherable items multipiler</td>
+<td>可收集物品倍增器</td>
+</tr>
+<tr>
+<td>CollectionObjectHpRate</td>
+<td>Getherable objects HP multipiler</td>
+<td>可收集的物体 HP 倍增器</td>
+</tr>
+<tr>
+<td>CollectionObjectRespawnSpeedRate</td>
+<td>Getherable objects respawn interval</td>
+<td>可收集物体的重生间隔</td>
+</tr>
+<tr>
+<td>EnemyDropItemRate</td>
+<td>Dropped Items Multipiler</td>
+<td>掉落物品倍增器</td>
+</tr>
+<tr>
+<td>DeathPenalty</td>
+<td>Death penalty None : No lost, Item : Lost item without equipment, ItemAndEquipment : Lost item and equipment, All : Lost All item, equipment, pal(in inventory)</td>
+<td>死刑 None : 没有丢失， Item : 丢失的没有装备的物品， ItemAndEquipment : 丢失的物品和装备， All : 丢失所有物品、装备、朋友（库存中）</td>
+</tr>
+<tr>
+<td>GuildPlayerMaxNum</td>
+<td>Max player of Guild</td>
+<td>公会最大玩家数</td>
+</tr>
+<tr>
+<td>PalEggDefaultHatchingTime</td>
+<td>Time(h) to incubate massive egg</td>
+<td>孵化大蛋的时间(h)</td>
+</tr>
+<tr>
+<td>ServerPlayerMaxNum</td>
+<td>Maximum number of people who can join the server</td>
+<td>服务器最多可加入人数</td>
+</tr>
+<tr>
+<td>ServerName</td>
+<td>Server name</td>
+<td>服务器名称</td>
+</tr>
+<tr>
+<td>ServerDescription</td>
+<td>Server description</td>
+<td>服务器描述</td>
+</tr>
+<tr>
+<td>AdminPassword</td>
+<td>AdminPassword</td>
+<td>管理员密码</td>
+</tr>
+<tr>
+<td>ServerPassword</td>
+<td>Set the server password</td>
+<td>设置服务器密码</td>
+</tr>
+<tr>
+<td>PublicPort</td>
+<td>Public port number</td>
+<td>公共端口号</td>
+</tr>
+<tr>
+<td>PublicIP</td>
+<td>Public IP</td>
+<td>公共IP</td>
+</tr>
+<tr>
+<td>RCONEnabled</td>
+<td>Enable RCON</td>
+<td>启用RCON</td>
+</tr>
+<tr>
+<td>RCONPort</td>
+<td>Port number for RCON</td>
+<td>RCON 的端口号</td>
+</tr>
+</tbody>
+</table>
+<h2 id="windows">Windows服务器</h2>
+<h3 id="_16">连接服务器</h3>
+<ol>
+<li>在计算巢服务实例详情页中点击远程连接，免密登录。
+   <img alt="18.jpg" src="40.jpg" /></li>
+<li>使用公网链接，密码为创建服务实例时输入的密码。
+   <img alt="18.jpg" src="41.jpg" /></li>
+</ol>
+<h3 id="_17">替换存档</h3>
+<p>参考<a href="https://developer.aliyun.com/article/1428619">幻兽帕鲁服务器存档拷贝教程</a>手动替换</p>
+<h3 id="_18">清除存档（回档）</h3>
+<p>存档清除后，重新启动游戏后将会自动重新开始新游戏。
+参考教程：<a href="https://developer.aliyun.com/article/1429017#slide-1">清除存档</a></p>
+<h3 id="_19">修改配置</h3>
+<ol>
+<li>复制 C:\Program Files\PalServer\steam\steamapps\common\PalServer\DefaultPalWorldSettings.ini 的内容(如下)到 </li>
+</ol>
+<p>C:\Program Files\PalServer\steam\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer\PalWorldSettings.ini ，然后根据需求修改。
+   <code>; This configuration file is a sample of the default server settings.
+   ; Changes to this file will NOT be reflected on the server.
+   ; To change the server settings, modify Pal/Saved/Config/WindowsServer/PalWorldSettings.ini.
+   [/Script/Pal.PalGameWorldSettings]
+   OptionSettings=(Difficulty=None,DayTimeSpeedRate=1.000000,NightTimeSpeedRate=1.000000,ExpRate=1.000000,PalCaptureRate=1.000000,PalSpawnNumRate=1.000000,PalDamageRateAttack=1.000000,PalDamageRateDefense=1.000000,PlayerDamageRateAttack=1.000000,PlayerDamageRateDefense=1.000000,PlayerStomachDecreaceRate=1.000000,PlayerStaminaDecreaceRate=1.000000,PlayerAutoHPRegeneRate=1.000000,PlayerAutoHpRegeneRateInSleep=1.000000,PalStomachDecreaceRate=1.000000,PalStaminaDecreaceRate=1.000000,PalAutoHPRegeneRate=1.000000,PalAutoHpRegeneRateInSleep=1.000000,BuildObjectDamageRate=1.000000,BuildObjectDeteriorationDamageRate=1.000000,CollectionDropRate=1.000000,CollectionObjectHpRate=1.000000,CollectionObjectRespawnSpeedRate=1.000000,EnemyDropItemRate=1.000000,DeathPenalty=All,bEnablePlayerToPlayerDamage=False,bEnableFriendlyFire=False,bEnableInvaderEnemy=True,bActiveUNKO=False,bEnableAimAssistPad=True,bEnableAimAssistKeyboard=False,DropItemMaxNum=3000,DropItemMaxNum_UNKO=100,BaseCampMaxNum=128,BaseCampWorkerMaxNum=15,DropItemAliveMaxHours=1.000000,bAutoResetGuildNoOnlinePlayers=False,AutoResetGuildTimeNoOnlinePlayers=72.000000,GuildPlayerMaxNum=20,PalEggDefaultHatchingTime=72.000000,WorkSpeedRate=1.000000,bIsMultiplay=False,bIsPvP=False,bCanPickupOtherGuildDeathPenaltyDrop=False,bEnableNonLoginPenalty=True,bEnableFastTravel=True,bIsStartLocationSelectByMap=True,bExistPlayerAfterLogout=False,bEnableDefenseOtherGuildPlayer=False,CoopPlayerMaxNum=4,ServerPlayerMaxNum=32,ServerName="Default Palworld Server",ServerDescription="",AdminPassword="",ServerPassword="",PublicPort=8211,PublicIP="",RCONEnabled=False,RCONPort=25575,Region="",bUseAuth=True,BanListURL="https://api.palworldgame.com/api/banlist.txt")</code>
+   <img alt="18.jpg" src="38.jpg" /></p>
+<ol>
+<li>到ECS详情页重启ECS实例使配置生效
+   <img alt="18.jpg" src="39.jpg" /></li>
+</ol>
+<h2 id="_20">节约成本</h2>
+<p>前提条件： 部署服务时计费方式选择<strong>按量付费</strong></p>
+<p>使用完毕后可以通过下述两种方式来节省成本：</p>
+<ol>
+<li>若只是暂时不使用了可以在运维管理页面选择关机（节省停机模式），此时部分资源会被回收并停止收费，以降低相关费用、节约使用成本，下次使用再进行开机，操作如下：
+   <img alt="8.jpg" src="8.jpg" /></li>
+<li>若彻底不再使用了可以直接将服务实例删除，后续就不会再产生费用。<strong>需要注意</strong>：如果创建时是选择的包年包月，则需要将服务实例先转为按量付费。
+   <img alt="tran_to_postpay.png" src="tran_to_postpay.png" /></li>
+</ol>
+<h2 id="_21">游戏存档</h2>
+<h3 id="_22">手动存档</h3>
+<h4 id="1ecs">方式1：ECS快照</h4>
+<ol>
+<li>登录计算巢控制台，进入服务管理页面，点击服务实例ID，进入服务实例详情页面点击资源，找到ECS实例并进入详情页面。
+   <img alt="9.jpg" src="24.jpg" /></li>
+<li>点击<strong>云盘</strong>，然后给系统盘<strong>创建快照</strong>。
+   <img alt="9.jpg" src="25.jpg" /></li>
+</ol>
+<h4 id="2">方式2：手动执行</h4>
+<p><a href="https://developer.aliyun.com/article/1428619">计算巢-幻兽帕鲁服务器存档拷贝到本机教程</a></p>
+<h3 id="_23">自动存档</h3>
+<h4 id="ecs">ECS快照策略</h4>
+<ol>
+<li>登录计算巢控制台，进入服务管理页面，点击服务实例ID，进入服务实例详情页面点击资源，找到ECS实例并进入详情页面。
+   <img alt="snapshot_auto1.png" src="snapshot_auto1.png" /></li>
+<li>点击<strong>云盘</strong>，然后给系统盘<strong>创建快照策略</strong>。
+   <img alt="snapshot_auto2.png" src="snapshot_auto2.png" /></li>
+<li>设置自动快照策略，点击<strong>新建自动快照策略</strong>。
+   <img alt="snapshot_auto3.png" src="snapshot_auto3.png" /></li>
+<li>新建自动快照策略，设置快照策略名称，快照周期，快照保留天数，点击<strong>确定启用自动快照策略</strong>，完成自动快照策略的创建。
+   <img alt="snapshot_auto4.png" src="snapshot_auto4.png" /></li>
+<li>启用成功后可以看到已关联一个快照策略： 
+   <img alt="snapshot_auto9.png" src="snapshot_auto9.png" /></li>
+</ol>
+<h3 id="_24">恢复存档</h3>
+<p>参考文档：<a href="https://help.aliyun.com/zh/ecs/user-guide/roll-back-a-disk-by-using-a-snapshot">使用快照回滚云盘</a>
+1. 停止ECS实例。
+   <img alt="9.jpg" src="32.jpg" />
+   <img alt="stop_ecs.png" src="stop_ecs.png" />
+2. 实例停止后，点击快照进入详情页，然后选择对应时间点的快照后点击回滚云盘。
+   <img alt="snapshot_auto5.png" src="snapshot_auto5.png" />
+3. 勾选<strong>回滚后立即启动实例</strong>，等待回滚云盘任务执行完成，启动ECS实例。
+   <img alt="snapshot_auto6.png" src="snapshot_auto6.png" />
+   <img alt="snapshot_auto7.png" src="snapshot_auto7.png" />
+4. 回滚后实例待状态变为<strong>运行中</strong>，可以重新连接游戏。
+   <img alt="snapshot_auto8.png" src="snapshot_auto8.png" /></p>
+<h3 id="_25">删除存档</h3>
+<p>rm /home/ecs-assist-user/.steam/SteamApps/common/PalServer/Pal/Saved/SaveGames</p>
+<h4 id="_26">修改完成后重启服务</h4>
+<p>sudo systemctl restart pal-server</p>
+<h2 id="_27">官方支持</h2>
+<p>您有任何问题或者建议，可以使用微信或钉钉扫描下方二维码，加人我们的官方服务群，我们将非常欢迎您的建议和反馈～</p>
+<p><img src="img.png" height="400" align="bottom"/></p>
+<h2 id="_28">常见问题</h2>
+<h3 id="_29">删除时提示无法删除，存在预付费资源</h3>
+<p>注意：首购的包年包月实例退款成功后，再次购买没有优惠。</p>
+<ol>
+<li>
+<p>拿ECS实例ID到<a href="https://usercenter2.aliyun.com/refund/refund">用户中心</a>退款
+   <img alt="23.jpg" src="23.jpg" /></p>
+</li>
+<li>
+<p>退款完成后再次删除计算巢服务实例</p>
+</li>
+</ol>
+<h3 id="no-password-has-been-entered">进入游戏提示：No password has been entered.</h3>
+<p>按以下流程操作解决：
+   <img alt="23.jpg" src="26.png" />
+   <img alt="23.jpg" src="27.JPG" />
+   <img alt="23.jpg" src="28.JPG" />
+   <img alt="23.jpg" src="29.JPG" />
+   <img alt="23.jpg" src="30.JPG" /></p>
+<h3 id="_30">变配服务实例报错</h3>
+<p>如果出现类似的报错：
+{code: null, message: "ROS stack xxx ROLLBACK_COMPLETE: Resource UPDATE failed: StackValidationFailed: resources.InstanceRunCommand: i-xxx are not running. Command invocation only support running instances.", requestId: xxx}
+解决方案：需要先重启下ECS服务器，待ecs服务器启动完成后，再进行变配。</p>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.1
+  Docs Build Date UTC : 2025-09-15 07:25:55.375062+00:00
+  -->
+</body>
+</html>
