@@ -59,51 +59,12 @@ Service:
                 - InternetChargeType
                 - InternetMaxBandwidthOut
               Type: Custom
-          AllowedRegions:
-            - cn-shanghai
-            - cn-hangzhou
-            - cn-heyuan
-            - cn-shenzhen
-            - cn-wulanchabu
-            - cn-huhehaote
-            - cn-qingdao
-            - cn-guangzhou
-            - cn-fuzhou
-            - cn-wuhan-lr
-            - cn-nanjing
-            - cn-beijing
         - Name: 选择ECS实例
           Url: ros_templates/template2.yaml
           PredefinedParameters: []
-          AllowedRegions:
-            - cn-shanghai
-            - cn-hangzhou
-            - cn-heyuan
-            - cn-shenzhen
-            - cn-wulanchabu
-            - cn-huhehaote
-            - cn-qingdao
-            - cn-guangzhou
-            - cn-beijing
-            - cn-nanjing
-            - cn-fuzhou
-            - cn-wuhan-lr
     TemplateConfigs:
       - Name: 新建ECS实例
         Url: ros_templates/template1.yaml
-        AllowedRegions:
-          - cn-shanghai
-          - cn-hangzhou
-          - cn-heyuan
-          - cn-shenzhen
-          - cn-wulanchabu
-          - cn-huhehaote
-          - cn-qingdao
-          - cn-guangzhou
-          - cn-fuzhou
-          - cn-wuhan-lr
-          - cn-nanjing
-          - cn-beijing
         PredefinedParameters:
           - Name: 热卖：最多支持8个玩家
             Parameters:
@@ -156,19 +117,6 @@ Service:
             EnableWebProxy: false
       - Name: 选择ECS实例
         Url: ros_templates/template2.yaml
-        AllowedRegions:
-          - cn-shanghai
-          - cn-hangzhou
-          - cn-heyuan
-          - cn-shenzhen
-          - cn-wulanchabu
-          - cn-huhehaote
-          - cn-qingdao
-          - cn-guangzhou
-          - cn-beijing
-          - cn-nanjing
-          - cn-fuzhou
-          - cn-wuhan-lr
         PredefinedParameters: []
         DeployScene: ECS
         OutputConfigs:
@@ -279,22 +227,6 @@ Artifact:
     ArtifactProperty:
       RegionId: ${ImageBuilder.EcsImage_1.RegionId}
       ImageId: ${ImageBuilder.EcsImage_1.SourceImageId}
-    SupportRegionIds:
-      - cn-shanghai
-      - cn-hangzhou
-      - cn-heyuan
-      - cn-shenzhen
-      - cn-wulanchabu
-      - cn-huhehaote
-      - cn-zhangjiakou
-      - cn-qingdao
-      - cn-guangzhou
-      - cn-fuzhou
-      - cn-wuhan-lr
-      - cn-nanjing
-      - cn-beijing
-      - ap-southeast-1
-      -cn-chengdu
   Artifact_2:
     ArtifactType: EcsImage
     ArtifactName: palwinwin0125
@@ -302,22 +234,6 @@ Artifact:
     ArtifactProperty:
       RegionId: ${ImageBuilder.EcsImage_2.RegionId}
       ImageId: ${ImageBuilder.EcsImage_2.SourceImageId}
-    SupportRegionIds:
-      - cn-shanghai
-      - cn-hangzhou
-      - cn-heyuan
-      - cn-shenzhen
-      - cn-wulanchabu
-      - cn-huhehaote
-      - cn-zhangjiakou
-      - cn-qingdao
-      - cn-guangzhou
-      - cn-fuzhou
-      - cn-wuhan-lr
-      - cn-nanjing
-      - cn-beijing
-      - ap-southeast-1
-      - cn-chengdu
 ImageBuilder:
   EcsImage_1:
     RegionId: ap-southeast-1
